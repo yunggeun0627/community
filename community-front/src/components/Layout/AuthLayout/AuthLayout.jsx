@@ -1,0 +1,16 @@
+import React from 'react';
+/** @jsxImportSource @emotion/react */
+import * as s from './styles.js';
+
+function AuthLayout({children}) {
+    return (
+        <div css={s.layout}>
+            <div css={s.container}>
+                <h1 css={s.title}></h1>
+                {children}
+            </div>
+        </div>
+    );
+}
+
+export default AuthLayout;
