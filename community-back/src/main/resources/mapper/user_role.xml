@@ -11,15 +11,15 @@
     <delete id="deleteByUserId">
         delete
         from
-        user_role_tb
+            user_role_tb
         where
-        user_id = #{user_Id}
+            user_id = #{user_Id}
     </delete>
     <delete id="deleteByUserIds">
         delete
         form
-        user_role_tb
+            user_role_tb
         where
-        user_id in <foreach item="userId" collection="userIds" open="(" close=")"  separator=","> #{userId} </foreach>
+            user_id in <foreach item="userId" collection="userIds" open="(" close=")"  separator=","> #{userId} </foreach>
     </delete>
 </mapper>

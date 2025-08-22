@@ -87,7 +87,7 @@ function Join(props) {
         }
         try {
             const response = await reqJoin(reqData);
-            const {data} = response;
+            const data = response.data;
             console.log(data);
             await Swal.fire({
                 position: "center",
@@ -98,17 +98,17 @@ function Join(props) {
             });
             navigate("/auth/login", {
                 state: {
-                    username: data.body.username,
+                    username: data?.body?.username,
                 }
             });
         } catch(error) {
             console.log(error)
             const {response} = error;
-            const {data} = response;
+            const data = response?.data;
             console.log(data);
             await Swal.fire({
                 icon: "error",
-                title: data.body.username,
+                title: data?.body?.username,
             });
         }
     }

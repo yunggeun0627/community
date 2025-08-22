@@ -6,10 +6,10 @@
 <mapper namespace="com.korit.communityback.domain.role.RoleMapper">
     <select id="findByRoleName" resultType="com.korit.communityback.domain.role.Role">
         select
-        *
+            *
         from
-        role_tb
+            role_tb
         where
-        role_name = #{roleName}
+            role_name = #{roleName}
     </select>
 </mapper>
