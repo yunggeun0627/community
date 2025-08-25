@@ -36,12 +36,12 @@ function RootRoute(props) {
             <MainLayout>
                 <Routes>
                     <Route path='/auth/*' element={<Auth />} />
-                    <Route path='/compass' element={<Compass />} />
-                    <Route path='/home' element={<Home />} />
-                    <Route path='/made' element={<Made />} />
-                    <Route path='/message' element={<Message />} />
-                    <Route path='/updata' element={<Updata />} />
+                    <Route path='/compass/*' element={<Compass />} />
+                    <Route path='/home/*' element={<Home />} />
                     <Route path='/admin/*' element={<AdminRoute />} />
+                    <Route path='/made/*' element={<Made />} />
+                    <Route path='/message/*' element={<Message />} />
+                    <Route path='/updata/*' element={<Updata />} />
                     <Route path='*' element={ <NotFound /> } />
                 </Routes>
             </MainLayout>

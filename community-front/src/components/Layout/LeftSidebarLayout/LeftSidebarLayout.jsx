@@ -29,6 +29,15 @@ function LeftSideBarLayout(props) {
         },
         {
             id: 2,
+            path: "/home",
+            name: "홈",
+            icon: {
+                off: <GoHome />,
+                on: <GoHomeFill />,
+            }
+        },
+        {
+            id: 3,
             path: "/Compass",
             name: "탐색",
             icon: {
@@ -37,7 +46,7 @@ function LeftSideBarLayout(props) {
             }
         },
         {
-            id: 3,
+            id: 4,
             path: "/Made",
             name: "만들다",
             icon: {
@@ -46,7 +55,7 @@ function LeftSideBarLayout(props) {
             }
         },
         {
-            id: 4,
+            id: 5,
             path: "/Update",
             name: "업데이트",
             icon: {
@@ -55,7 +64,7 @@ function LeftSideBarLayout(props) {
             }
         },
         {
-            id: 5,
+            id: 6,
             path: "/Message",
             name: "메세지",
             icon: {

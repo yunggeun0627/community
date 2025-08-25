@@ -87,7 +87,7 @@ function Join(props) {
         }
         try {
             const response = await reqJoin(reqData);
-            const data = response.data;
+            const { data } = response;
             console.log(data);
             await Swal.fire({
                 position: "center",

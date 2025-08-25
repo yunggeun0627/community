@@ -45,7 +45,7 @@ function Login(props) {
             const { response } = error;
             await Swal.fire({
                 icon: "error",
-                title: response.data.body.errorMessage,
+                title: response.data?.body?.errorMessage,
             });
         }
     }
