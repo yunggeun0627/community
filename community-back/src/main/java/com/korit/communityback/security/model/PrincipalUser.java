@@ -19,17 +19,13 @@ public class PrincipalUser implements UserDetails, OAuth2User {
     private User user;
     private Map<String, Object> attributes;
 
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return user.getUserRoles()
                 .stream()
                 .map(userRole -> new SimpleGrantedAuthority(userRole.getRole().getRoleName()))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public String getName() {
-        return "";
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -39,6 +35,11 @@ public class PrincipalUser implements UserDetails, OAuth2User {
 
     @Override
     public String getUsername() {
+        return "";
+    }
+
+    @Override
+    public String getName() {
         return "";
     }
 }

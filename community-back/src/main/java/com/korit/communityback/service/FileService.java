@@ -16,16 +16,34 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class FileService {
 
-    private final AppProperties appProperties;
+    @Value("${user.dir}")
+    private String rootPath;
 
-    public String uploadFile(MultipartFile file, String imageConfigName) {
-        String dirPath = appProperties.getImageConfigs().get(imageConfigName).getDirPath();
+//    private final AppProperties appProperties;
 
+//    public String uploadFile(MultipartFile file, String imageConfigName) {
+//        String dirPath = appProperties.getImageConfigs().get(imageConfigName).getDirPath();
+//
+//        String newFilename = generateRandomFilename(file.getOriginalFilename());
+//        // 파일 업로드 경로 생성 -> rootPath - ${user.dir} -> 프로젝트 경로
+//
+//        mkdirs(dirPath);
+//        Path path = Paths.get(dirPath + "/" + newFilename);
+//        try {
+//            Files.write(path, file.getBytes());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//
+//        return newFilename;
+//    }
+
+    public String uploadFile(MultipartFile file, String dirPath) {
         String newFilename = generateRandomFilename(file.getOriginalFilename());
-        // 파일 업로드 경로 생성 -> rootPath - ${user.dir} -> 프로젝트 경로
-
-        mkdirs(dirPath);
-        Path path = Paths.get(dirPath + "/" + newFilename);
+        String uploadPath = rootPath + "/upload" + dirPath;
+        mkdirs(uploadPath);
+        Path path = Paths.get(uploadPath + "/" + newFilename);
         try {
             Files.write(path, file.getBytes());
         } catch (Exception e) {

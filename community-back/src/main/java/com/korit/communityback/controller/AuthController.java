@@ -4,6 +4,8 @@ import com.korit.communityback.dto.auth.JoinReqDto;
 import com.korit.communityback.dto.auth.LoginReqDto;
 import com.korit.communityback.dto.reponse.ResponseDto;
 import com.korit.communityback.service.AuthService;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,4 +28,19 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody LoginReqDto dto) {
         return ResponseEntity.ok(ResponseDto.success(authService.login(dto)));
     }
+
+    @GetMapping("/X/login")
+    public void xLogin(HttpServletResponse response, HttpSession session) throws Exception {
+
+    }
+
+        @GetMapping("/x/callback")
+        public ResponseEntity<?> xCallback (
+                @RequestParam("oauth_token") String oauthToken,
+                @RequestParam("oauth_verifier") String oauthVerifier,
+                HttpSession session) throws Exception {
+
+        return ResponseEntity.ok("소셜 로그인 완료");
+    }
 }
+

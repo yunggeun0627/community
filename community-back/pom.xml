@@ -99,6 +99,12 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- build.gradle.kts 예시면 implementation("com.github.scribejava:scribejava-core:8.3.3") -->
+        <dependency>
+            <groupId>com.github.scribejava</groupId>
+            <artifactId>scribejava-core</artifactId>
+            <version>8.3.3</version>
+        </dependency>
     </dependencies>
 
     <build>

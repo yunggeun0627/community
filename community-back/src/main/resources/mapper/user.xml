@@ -60,7 +60,7 @@
     </update>
     <delete id="deleteByIds">
         delete
-        form
+        from
             user_tb
         where
             user_id in <foreach item="userId" collection="userIds" open="(" close=")"  separator=",">#{userId}</foreach>

@@ -11,21 +11,21 @@ spring:
     activate:
       on-profile: local-server
 
-app:
-  server-host: "http://localhost:8080"
-  image-configs:
-    profile:
-      prefix: "/image/profile"
-      dir-path: "${user.dir}/upload/profile"
-      default-img: "default.jpg"
-    product:
-      prefix: "/image/product"
-      dir-path: "${user.dir}/upload/product"
-      default-img: "default.jpg"
-    forum:
-      prefix: "/image/forum"
-      dir-path: "${user.dir}/upload/forum"
-      default-img: "default.jpg"
+#app:
+#  server-host: "http://localhost:8080"
+#  image-configs:
+#    profile:
+#      prefix: "/image/profile"
+#      dir-path: "${user.dir}/upload/profile"
+#      default-img: "default.jpg"
+#    product:
+#      prefix: "/image/product"
+#      dir-path: "${user.dir}/upload/product"
+#      default-img: "default.jpg"
+#    forum:
+#      prefix: "/image/forum"
+#      dir-path: "${user.dir}/upload/forum"
+#      default-img: "default.jpg"
 
 ---
 
@@ -36,7 +36,7 @@ spring:
 
 
   datasource:
-    url: jdbc:mysql://localhost:3308/community_db
+    url: jdbc:mysql://127.0.0.1:3306/community_db
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: 5
@@ -49,8 +49,8 @@ spring:
         max-file-size: 100MB
         max-request-size: 100MB
         enabled: true
-    mybatis:
-      mapper-locations: classpath:mapper/**/*.xml
-      configuration:
-        map-underscore-to-camel-case: true
-      type-aliases-package: com.korit.communityback.domain.entity
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+  type-aliases-package: com.korit.communityback.domain.entity

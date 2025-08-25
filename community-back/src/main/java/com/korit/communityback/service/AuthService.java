@@ -29,8 +29,8 @@ public class AuthService {
     private final JwtUtil jwtUtil;
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
-    private final RoleMapper roleMapper;
     private final UserRoleMapper userRoleMapper;
+    private final RoleMapper roleMapper;
 
     @Transactional(rollbackFor = Exception.class)
     public User join(JoinReqDto dto) throws BindException {
@@ -64,6 +64,7 @@ public class AuthService {
         if (foundUser == null) {
             throw new LoginException("로그인 오류", "사용자 정보를 다시 확인하세요.");
         }
+
         if (!passwordEncoder.matches(dto.getPassword(), foundUser.getPassword())) {
             throw new LoginException("로그인 오류", "사용자 정보를 다시 확인하세요.");
         }
