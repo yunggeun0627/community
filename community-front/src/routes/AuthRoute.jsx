@@ -9,8 +9,8 @@ import { useQueryClient } from '@tanstack/react-query';
 function AuthRoute(props) {
     return (
         <Routes>
-            <Route path='/join' element={<Join />} />
             <Route path='/login' element={<Login />} />
+            <Route path='/join' element={<Join />} />
             <Route path='/oauth2/login' element={<OAuth2Login />} />
             <Route path='*' element={<NotFound />} />
         </Routes>

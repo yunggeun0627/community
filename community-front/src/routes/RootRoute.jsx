@@ -4,12 +4,6 @@ import Auth from '../Pages/Auth/Auth';
 import MainLayout from '../components/Layout/MainLayout/MainLAyout';
 import usePrincipalQuery from '../queries/usePrincipalQuery';
 import Loading from '../components/Loading/Loading';
-import NotFound from '../Pages/NotFound/NotFound';
-import AdminRoute from './AdminRoute';
-import Compass from '../Pages/Compass/Compass';
-import Made from '../Pages/Made/Made';
-import Message from '../Pages/Message/Message';
-import Updata from '../Pages/Updata/Updata';
 import Home from '../Pages/Home/Home';
 
 
@@ -35,14 +29,16 @@ function RootRoute(props) {
         return (
             <MainLayout>
                 <Routes>
-                    <Route path='/auth/*' element={<Auth />} />
-                    <Route path='/compass/*' element={<Compass />} />
-                    <Route path='/home/*' element={<Home />} />
-                    <Route path='/admin/*' element={<AdminRoute />} />
-                    <Route path='/made/*' element={<Made />} />
-                    <Route path='/message/*' element={<Message />} />
-                    <Route path='/updata/*' element={<Updata />} />
-                    <Route path='*' element={ <NotFound /> } />
+                    <Route path="/" element={ <Home /> } />
+                    {/* <Route path="/twitter/exlore" element={ <Exlore /> } />
+                    <Route path="/notifications" element={<Notifications /> } />
+                    <Route path="/messages" element={ <Messages /> } />
+                    <Route path="/bookmarks" element={ <Bookmarks /> } />
+                    <Route path="/jobs" element={ <Jobs /> } />
+                    <Route path="/communities" element={ <Communities /> } />
+                    <Route path="/premium" element={ <Premium /> } />
+                    <Route path="/profile" element={ <Profile /> } />
+                    <Route path="/more" element={ <More /> } /> */}
                 </Routes>
             </MainLayout>
         );
@@ -52,7 +48,6 @@ function RootRoute(props) {
             <Route path='/auth/*' element={<Auth />} />
         </Routes>
     )
-
 }
 
 export default RootRoute;

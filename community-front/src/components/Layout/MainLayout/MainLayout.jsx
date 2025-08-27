@@ -5,12 +5,12 @@ import LeftSideBarLayout from '../LeftSidebarLayout/LeftSidebarLayout.jsx';
 
 
 
-function MainLayout({ children }) {
+function MainLayout({children}) {
     return (
         <div css={s.layout}>
             <LeftSideBarLayout />
             <div css={s.container}>
-                { children }
+                {children}
             </div>
         </div>
     );

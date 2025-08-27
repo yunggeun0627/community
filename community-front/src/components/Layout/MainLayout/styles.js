@@ -2,13 +2,14 @@ import { css } from "@emotion/react";
 
 export const layout = css`
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     width: 100%;
-    height: 100%;
+    height: 100vh;
+    overflow: hidden;
 `;
 
 export const container = css`
-    flex-grow: 1;
+    flex: 1;
     height: 100%;
     overflow-y: hidden;
 `;

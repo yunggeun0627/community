@@ -1,27 +1,29 @@
 /** @jsxImportSource @emotion/react */
 import * as s from './styles';
 import { GoBell, GoBellFill, GoHome, GoHomeFill } from "react-icons/go";
-import { LuMessageCircleMore} from "react-icons/lu";
-import { AiFillMessage } from "react-icons/ai";
-import { IoSettings, IoSettingsOutline } from "react-icons/io5";
+import { LuBriefcaseBusiness, LuUserRound} from "react-icons/lu";
+import { IoBookmark, IoBookmarkOutline, IoSearchOutline, IoSearchSharp, IoSettingsOutline } from "react-icons/io5";
+import { CiCircleMore } from "react-icons/ci";
+import { CgMoreO } from "react-icons/cg";
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { MdAddBox, MdOutlineAddBox } from "react-icons/md";
 import Swal from 'sweetalert2';
-import { FaCompass, FaPinterest, FaRegCompass } from 'react-icons/fa';
+import { FaEnvelope, FaPenSquare, FaRegEnvelope } from 'react-icons/fa';
 import { useQueryClient } from '@tanstack/react-query';
-
+import { HiOutlineUsers, HiUser, HiUsers } from 'react-icons/hi2';
+import { BsTwitterX } from 'react-icons/bs';
+import { FiMoreHorizontal } from "react-icons/fi";
 
 function LeftSideBarLayout(props) {
-    const navigate = useNavigate();
-    const queryClient = useQueryClient();
-    const location = useLocation();
-    const [nowPath, setNowPath] = useState("");
+    // const navigate = useNavigate();
+    // const queryClient = useQueryClient();
+    // const [nowPath, setNowPath] = useState("");
+    const pathname = useLocation().pathname;
     const MENUS = [
         {
             id: 1,
             path: "/",
-            name: "홈",
+            name: "Home",
             icon: {
                 off: <GoHome />,
                 on: <GoHomeFill />,
@@ -29,114 +31,114 @@ function LeftSideBarLayout(props) {
         },
         {
             id: 2,
-            path: "/home",
-            name: "홈",
+            path: "/twitter/exlore",
+            name: "Explore",
             icon: {
-                off: <GoHome />,
-                on: <GoHomeFill />,
+                off: <IoSearchOutline />,
+                on: <IoSearchSharp />,
             }
         },
         {
             id: 3,
-            path: "/Compass",
-            name: "탐색",
-            icon: {
-                off: <FaRegCompass />,
-                on: <FaCompass />,
-            }
-        },
-        {
-            id: 4,
-            path: "/Made",
-            name: "만들다",
-            icon: {
-                off: <MdOutlineAddBox />,
-                on: <MdAddBox />,
-            }
-        },
-        {
-            id: 5,
-            path: "/Update",
-            name: "업데이트",
+            path: "/notifications",
+            name: "Notifications",
             icon: {
                 off: <GoBell />,
                 on: <GoBellFill />,
             }
         },
         {
-            id: 6,
-            path: "/Message",
-            name: "메세지",
+            id: 4,
+            path: "/messages",
+            name: "Message",
             icon: {
-                off: <LuMessageCircleMore />,
-                on: <AiFillMessage />,
+                off: <FaRegEnvelope />,
+                on: <FaEnvelope />,
+            }
+        },
+        {
+            id: 5,
+            path: "/bookmarks",
+            name: "Bookmarks",
+            icon: {
+                off: <IoBookmarkOutline />,
+                on: <IoBookmark />,
+            }
+        },
+        {
+            id: 6,
+            path: "/jobs",
+            name: "Jobs",
+            icon: {
+                off: <LuBriefcaseBusiness />,
+                on: <LuBriefcaseBusiness />,
+            }
+        },
+        {
+            id: 7,
+            path: "/communities",
+            name: "Communities",
+            icon: {
+                off: <HiOutlineUsers />,
+                on: <HiUsers />,
+            }
+        },
+        {
+            id: 8,
+            path: "/premium",
+            name: "Premium",
+            icon: {
+                off: <BsTwitterX />,
+                on: <BsTwitterX />,
+            }
+        },
+        {
+            id: 9,
+            path: "/profile",
+            name: "Profile",
+            icon: {
+                off: <LuUserRound />,
+                on: <HiUser />,
+            }
+        },
+        {
+            id: 10,
+            path: "/more",
+            name: "More",
+            icon: {
+                off: <CiCircleMore />,
+                on: <CgMoreO />,
             }
         },
     ];
-    
-    useEffect(() => {
-        setNowPath(location.pathname);
-    }, [location.pathname]);
-
-    const handleLogoutOnClick = async () => {
-        const { isConfirmed } = await Swal.fire({
-            title: "로그아웃 하시겠습니까?",
-            showConfirmButton: true,
-            confirmButtonText: "예",
-            showCancelButton: true,
-            cancelButtonText: "아니오",
-        });
-
-        if (isConfirmed) {
-            localStorage.removeItem("AccessToken");
-            await queryClient.invalidateQueries({
-                queryKey: ["principal"],
-            });
-            navigate("/auth/login");
-        }
-    }
 
     return (
         <div css={s.layout}>
-            <header>
-                <div css={s.iconBox}>
-                    <FaPinterest />
+            <div css={s.logo}><BsTwitterX /></div>
+
+            <nav>
+                {MENUS.map((menu) => (
+
+                    <Link to={menu.path} key={menu.id} css={s.menu}>
+                        {pathname === menu.path ? menu.icon.on : menu.icon.off}
+                        <span>{menu.name}</span>
+                    </Link>
+                ))}
+            </nav>
+
+            <button css={s.postButton}>
+                <FaPenSquare size={20} />
+                <span>Post</span>
+            </button>
+
+            <div css={s.profileBox}>
+                <img css={s.profileImage} src="" alt="avatar" />
+                <div css={s.profileInfo}>
+                    <div css={s.profileName}>사용자 이름</div>
+                    <div css={s.profileId}>@username</div>
                 </div>
-            </header>
-            <main>
-                {
-                    MENUS.map(menu => {
-                        if (menu.path.startsWith("/admin") && !roles.includes("ROLE_ADMIN")) {
-                            return <></>;
-                        }
-                        if (menu.name === "home") {
-                            if (nowPath === menu.path) {
-                                return <Link key={menu.id} to={menu.path} css={s.iconBox}>
-                                    {menu.icon.on}
-                                </Link>
-                            } else {
-                                return <Link key={menu.id} to={menu.path} css={s.iconBox}>
-                                    {menu.icon.off}
-                                </Link>
-                            }
-                        }
-                        if (nowPath.startsWith(menu.path)) {
-                            return <Link key={menu.id} to={menu.path} css={s.iconBox}>
-                                {menu.icon.on}
-                                </Link>
-                        } else {
-                            return <Link key={menu.id} to={menu.path} css={s.iconBox}>
-                                {menu.icon.off}
-                                </Link>
-                        }
-                    })
-                }
-            </main>
-            <footer>
-                <div css={s.iconBox}>
-                    <IoSettingsOutline />
-                </div>
-            </footer>
+                <div css={s.profileMore}><FiMoreHorizontal /></div>
+            </div>
         </div>
     );
 }

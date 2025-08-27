@@ -1,80 +1,35 @@
 import { css } from "@emotion/react";
 
-export const container = css`
-    width: 100%;
-    height: 100%;
+export const layout = css`
+    flex: 1;
+    border-left: 1px solid #e6ecf0;
+    border-right: 1px solid #e6ecf0;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
 `;
 
-export const search = css`
+export const tabContainer = css`
     display: flex;
-    align-items: center;
-    position: relative;
-    box-sizing: border-box;
-    border: 0.1rem solid #dbdbdb;
-    border-radius: 0.5rem;
-    padding: 1rem 1.5rem;
-    cursor: pointer;
-    background-color: #eeeeee;
-
-    & > svg {
-        margin-right: 1rem;
-        font-size: 2rem;
-    }
-
-    & > input {
-        border: none;
-        outline: none;
-        flex-grow: 1;
-        font-size: 1.8rem;
-        background-color: transparent;
-        cursor: pointer;
-    }
+    border-bottom: 1px solid #e6ecf0;
+    margin-bottom: 10px;
 `;
 
-export const profile = css`
+export const tab = css`
     display: flex;
-    width: 4.8rem;
-    height: 4.8rem;
-    box-sizing: border-box;
-    border-radius: 1.6rem;
+    flex: 1;
+    font-weight: 600;
+    text-align: center;
     justify-content: center;
-    align-items: center;
-    flex-direction: row;
-    position: relative;
+    color: #536471;
+    background: none;
+    border: none;
+    outline: none;
     cursor: pointer;
-    
-    & > img {
-        height: 3.2rem;
-        width: 3.2rem;
-        border-radius: 50%;
-        position: relative;
-    }
 `;
 
-export const accountButton = css`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    perspective: 0.1rem;
-    height: 2.4rem;
-    width: 2.4rem;
-    box-sizing: border-box;
-    border-radius: 0.8rem;
-    cursor: pointer;
-
-    & > svg {
-        height: 1.2rem;
-        width: 1.2rem;
-        color: #57574c;
-    }
-`;
-
-export const Main = css`
-    padding: 0rem 0.8rem;
-    margin: auto 0;
-    box-sizing: border-box;
-    width: 100%;
-    height: 100%;
-    position: relative;
-    
+export const activeTab = css`
+    ${tab};
+    border-bottom: 2px solid #1d9bf0;
+    color: #1d9bf0;
 `;
