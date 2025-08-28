@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { FaPen } from 'react-icons/fa';
 /** @jsxImportSource @emotion/react */
 import * as s from './styles.js';
+import React, { useState } from 'react';
+import { FaPen } from 'react-icons/fa';
 import { CiImageOn } from 'react-icons/ci';
 import { RiEmotionHappyLine } from "react-icons/ri";
 import { AiOutlineBars } from "react-icons/ai";
@@ -11,9 +11,14 @@ function TweetBox({ onTweet }) {
 
     const handleSubmit = () => {
         if (!content) return;
-        onTweet({ id: Data.now(), user: "Me" ,content, likes: 0, retweets: 0 });
+        onTweet({ id: Date.now(), user: "Me" ,content, likes: 0, retweets: 0 });
         setContent("");
     }
+
+    const handleIconClick = (type) => {
+        if (onAction) onAction(type);
+    }
+
     return (
         <div css={s.box}>
             <textarea
@@ -24,9 +29,11 @@ function TweetBox({ onTweet }) {
             />
 
             <div css={s.actionsRow}>
-                <button css={s.iconButton}><CiImageOn /></button>
-                <button css={s.iconButton}><AiOutlineBars /></button>
-                <button css={s.iconButton}><RiEmotionHappyLine /></button>
+                <div css={s.iconGroup}>
+                    <button css={s.iconButton} onClick={() => handleIconClick("image")}><CiImageOn /></button>
+                    <button css={s.iconButton} onClick={() => handleIconClick("poll")}><AiOutlineBars /></button>
+                    <button css={s.iconButton} onClick={() => handleIconClick("emoji")}><RiEmotionHappyLine /></button>
+                </div>
 
                 <button css={s.button} onClick={handleSubmit}>
                     <FaPen /> Tweet

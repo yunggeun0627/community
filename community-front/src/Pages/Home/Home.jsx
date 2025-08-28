@@ -21,6 +21,14 @@ function Home(props) {
 
     const displayedTweets = tab === "forYou" ? allTweets : followingTweets;
 
+    const handleNewTweet = (tweet) => {
+        setTweets([tweet, ...tweets]);
+    };
+
+    const handleAction = (e) => {
+        alert(`${e} 버튼 클릭!`);
+    };
+
     return (
         <div css={s.layout}>
             <div css={s.tabContainer}>
@@ -38,9 +46,12 @@ function Home(props) {
                 </button>
             </div>
             
-            <TweetBox onTweet={(newTweet) => setTweets([newTweet, ...tweets])} />
+            <TweetBox onTweet={handleNewTweet} onAction={handleAction} />
             {tweets.map((tweet) => (
                 <TweetCard key={tweet.id} tweet={tweet} /> 
+            ))}
+            {displayedTweets.map((tweet) => (
+                <TweetCard key={tweet.id} tweet={tweet} />
             ))}
         </div>
     );

@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 export const layout = css`
-    display: flex;
+    /* display: flex;
     flex-direction: column;
     justify-content: flex-start;
     height: 100vh;
@@ -11,7 +11,18 @@ export const layout = css`
     background-color: #fff;
     color: black;
     box-sizing: border-box;
+    overflow-y: auto; */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100vh;
+    flex: 1; 
+    min-width: 200px;
+    padding: 20px;
+    border-right: 1px solid #e5e7eb;
+    box-sizing: border-box;
     overflow-y: auto;
+    background-color: #fff;
 
     .dark & {
         background-color: #000;
@@ -49,6 +60,9 @@ export const menu = css`
     text-decoration: none;
     font-size: 18px;
     transition: all 0.2s ease-in-out;
+    font-weight: 400;
+    width: 100%;
+    max-width: 220px;
 
     & > svg {
         width: 26px;

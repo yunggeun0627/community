@@ -1,12 +1,25 @@
 import { css } from "@emotion/react";
 
 export const layout = css`
-    flex: 1;
+    /* flex: 1;
     border-left: 1px solid #e6ecf0;
     border-right: 1px solid #e6ecf0;
     max-width: 600px;
     margin: 0 auto;
+    padding: 20px; */
+    flex: 2; 
+    min-width: 400px; 
     padding: 20px;
+    border-left: 1px solid #e6ecf0;
+    border-right: 1px solid #e6ecf0;
+    box-sizing: border-box;
+`;
+
+export const mainContainer = css`
+    flex: 2;
+    border-left: 1px solid #e6ecf0;
+    border-right: 1px solid #e6ecf0;
+    padding: 0 20px;
 `;
 
 export const tabContainer = css`

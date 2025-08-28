@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+import * as s from './styles.js';
 import React, { useState } from 'react';
 import { FaHeart, FaRegComment, FaRegHeart, FaRetweet } from 'react-icons/fa';
 
