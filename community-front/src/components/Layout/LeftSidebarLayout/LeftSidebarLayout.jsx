@@ -15,10 +15,10 @@ import { BsTwitterX } from 'react-icons/bs';
 import { FiMoreHorizontal } from "react-icons/fi";
 
 function LeftSideBarLayout(props) {
-    // const navigate = useNavigate();
-    // const queryClient = useQueryClient();
-    // const [nowPath, setNowPath] = useState("");
+    const navigate = useNavigate();
+    const [showMenu, setShowMenu] = useState(false);
     const pathname = useLocation().pathname;
+    const [avatar, setAvatar] = useState("");
     const MENUS = [
         {
             id: 1,
@@ -112,6 +112,30 @@ function LeftSideBarLayout(props) {
         },
     ];
 
+    const handleAvatarChange = (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                if (reader.result) {
+                    setAvatar(reader.result.toString());
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const toggleMenu = () => {
+        setShowMenu(!showMenu);
+    };
+    
+    const handleLogout = (e) => {
+        e.stopPropagation(); // 이벤트 버블 방지
+        localStorage.removeItem("AccessToken");
+        setIsLoggedIn(false);
+        navigate("/auth/login");
+    };
+
     return (
         <div css={s.layout}>
             <div css={s.logo}><BsTwitterX /></div>
@@ -132,12 +156,37 @@ function LeftSideBarLayout(props) {
             </button>
 
             <div css={s.profileBox}>
-                <img css={s.profileImage} src="" alt="avatar" />
+                <label htmlFor="avatarUpload">
+                    <img
+                        css={s.profileImage}
+                        src={avatar || "/default-avatar.png"}
+                        alt="avatar"
+                    />
+                </label>
+
+                <input
+                    id="avatarUpload"
+                    type="file"
+                    accept="image/*"
+                    style={{ display: "none" }}
+                    onChange={handleAvatarChange}
+                />
+
                 <div css={s.profileInfo}>
                     <div css={s.profileName}>사용자 이름</div>
                     <div css={s.profileId}>@username</div>
                 </div>
-                <div css={s.profileMore}><FiMoreHorizontal /></div>
+                <div css={s.profileMore} onClick={toggleMenu}>
+                    <FiMoreHorizontal />
+
+                    {showMenu && (
+                        <div css={s.dropdownMenu}>
+                            <button css={s.dropdownButton} onClick={handleLogout}>
+                                로그아웃
+                            </button>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );

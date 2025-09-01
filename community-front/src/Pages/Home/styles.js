@@ -1,25 +1,23 @@
 import { css } from "@emotion/react";
 
 export const layout = css`
-    /* flex: 1;
-    border-left: 1px solid #e6ecf0;
-    border-right: 1px solid #e6ecf0;
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px; */
-    flex: 2; 
-    min-width: 400px; 
+    flex: 2;
+    min-width: 400px;
     padding: 20px;
     border-left: 1px solid #e6ecf0;
     border-right: 1px solid #e6ecf0;
-    box-sizing: border-box;
+    height: 100vh;
 `;
 
 export const mainContainer = css`
-    flex: 2;
+    flex: 1;
+    min-width: 400px;
+    padding: 20px;
     border-left: 1px solid #e6ecf0;
     border-right: 1px solid #e6ecf0;
-    padding: 0 20px;
+    /* ✅ 스크롤 제거 */
+    height: auto;
+    overflow: visible;
 `;
 
 export const tabContainer = css`

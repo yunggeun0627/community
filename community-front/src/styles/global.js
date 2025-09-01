@@ -12,12 +12,15 @@ export const global = css`
         background-color: #f3f4f5;
     }
 
-    html,body,#root {
+    html,
+    body,
+    #root {
         margin: 0;
         padding: 0;
         width: 100vw;
         height: 100vh;
-        overflow: auto;
+        overflow: hidden; /* 브라우저 네이티브 스크롤 */
+        scroll-behavior: smooth;
     }
 
     #root {

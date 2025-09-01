@@ -4,25 +4,32 @@ import * as s from './styles.js';
 import TweetBox from '../TweetBox/TweetBox.jsx';
 import TweetCard from '../TweetCard/TweetCard.jsx';
 
-function Home(props) {
-    const [tab, setTab] = useState("For you");
+function Home({ onScrollToNew }) {
+    const [tab, setTab] = useState("forYou");
     const [tweets, setTweets] = useState([]);
 
     const allTweets = [
-        { id: 1, content: "전체 글 1" },
-        { id: 2, content: "전체 글 2" },
-        { id: 3, content: "전체 글 3" },
+        { id: 1, content: "전체 글 1", retweets: 0 },
+        { id: 2, content: "전체 글 2", retweets: 0 },
+        { id: 3, content: "전체 글 3", retweets: 0 },
     ];
 
     const followingTweets = [
-        { id: 101, content: "팔로우 글 1" },
-        { id: 102, content: "팔로우 글 2" },
+        { id: 101, content: "팔로우 글 1", retweets: 0 },
+        { id: 102, content: "팔로우 글 2", retweets: 0 },
     ];
+
+    
 
     const displayedTweets = tab === "forYou" ? allTweets : followingTweets;
 
     const handleNewTweet = (tweet) => {
-        setTweets([tweet, ...tweets]);
+        setTweets((prev) => [tweet, ...prev]);
+        setTimeout(() => {
+            if (onScrollToNew) {
+                onScrollToNew();
+            }
+        }, 100);
     };
 
     const handleAction = (e) => {

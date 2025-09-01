@@ -1,9 +1,22 @@
 import React from 'react';
+/** @jsxImportSource @emotion/react */
+import * as s from './styles.js';
 
-function Communites(props) {
+function Communites({ onAction }) {
+    const communities = ["이파리", "파스텔"];
+
+    const handleClick = (type) => {
+        if (onAction) onAction(type);
+    };
+
     return (
-        <div>
-            
+        <div css={s.layout}>
+            <h2>Communities</h2>
+            {communities.map((c, i) => (
+                <div key={i} css={s.item} onClick={() => handleClick("community")}>
+                    {c}
+                </div>
+            ))}
         </div>
     );
 }

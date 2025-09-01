@@ -1,20 +1,11 @@
 import { css } from '@emotion/react';
 
 export const sidebar = css`
-    /* width: 350px;
-    padding: 10px 20px;
+    flex: 0 0 350px; /* 고정 폭 */
+    height: 100vh;
     position: sticky;
     top: 0;
-    height: 100vh;
-    overflow-y: auto; */
-    flex: 1; 
-    min-width: 200px; 
-    padding: 10px 20px;
-    height: 100vh;
-    overflow-y: auto;
-    box-sizing: border-box;
-    border-left: 1px solid #e5e7eb;
-    background-color: #fff;
+    padding: 20px;
 `;
 
 export const searchWrapper = css`
@@ -24,6 +15,7 @@ export const searchWrapper = css`
     padding: 5px 0;
     z-index: 10;
     overflow: hidden;
+    width: 256px; /* Post 버튼 기준 */
 `;
 
 export const searchInput = css`
@@ -34,6 +26,7 @@ export const searchInput = css`
     background-color: #f5f8fa;
     font-size: 14px;
     outline: none;
+    margin-bottom: 15px;
     box-sizing: border-box;
 
     &:focus {
@@ -45,8 +38,9 @@ export const searchInput = css`
 export const trendsBox = css`
     background-color: #f5f8fa;
     border-radius: 16px;
-    margin-top: 15px;
+    margin-bottom: 15px;
     padding: 15px;
+    width: 256px;
 `;
 
 export const sectionTitle = css`
@@ -77,8 +71,9 @@ export const treadItem = css`
 export const followBox = css`
     background-color: #f5f8fa;
     border-radius: 16px;
-    margin-top: 15px;
+    margin-bottom: 15px;
     padding: 15px;
+    width: 256px;
 `;
 
 export const userItem = css`

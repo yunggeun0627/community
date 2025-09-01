@@ -2,14 +2,17 @@ import { css } from "@emotion/react";
 
 export const layout = css`
     display: flex;
-    flex-direction: row;
+    justify-content: center; /* 가운데 정렬 */
     width: 100%;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
+    overflow-y: auto; /* ✅ 스크롤 여기만 */
 `;
 
 export const container = css`
     flex: 1;
-    height: 100%;
-    overflow-y: hidden;
+    min-width: 600px;
+    max-width: 600px;
+    height: 100vh;
+    border-right: 1px solid #e6ecf0;
+    padding: 20px;
 `;
