@@ -42,5 +42,14 @@ export const tab = css`
 export const activeTab = css`
     ${tab};
     border-bottom: 2px solid #1d9bf0;
+    font-weight: 700;
     color: #1d9bf0;
+`;
+
+export const followButton = css`
+    padding: 6px 12px;
+    border-radius: 9999px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
 `;

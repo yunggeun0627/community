@@ -2,7 +2,7 @@ package com.korit.communityback.controller;
 
 import com.korit.communityback.dto.auth.JoinReqDto;
 import com.korit.communityback.dto.auth.LoginReqDto;
-import com.korit.communityback.dto.reponse.ResponseDto;
+import com.korit.communityback.dto.response.ResponseDto;
 import com.korit.communityback.service.AuthService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;

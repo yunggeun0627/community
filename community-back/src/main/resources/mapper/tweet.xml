@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.korit.communityback.domain.tweet.TweetMapper">
+
+    <resultMap id="TweetMap" type="com.korit.communityback.domain.tweet.Tweet">
+        <id property="tweetId" column="tweet_id" />
+        <result property="userId" column="user_id" />
+        <result property="content" column="content" />
+        <result property="imageUrl" column="image_url" />
+        <result property="createdAt" column="created_at" />
+    </resultMap>
+
+    <!-- 전체 트윗 조회 -->
+    <select id="findAll" resultType="com.korit.communityback.domain.tweet.Tweet">
+        select
+            tweet_id,
+            user_id,
+            content,
+            image_url,
+            created_at
+        from
+            tweet_tb
+        order by created_at desc
+    </select>
+
+    <!-- 트윗 삽입 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="tweetId">
+        insert into tweet_tb (user_id, content, image_url, created_at)
+        values (#{userId}, #{content}, #{imageUrl}, #{createdAt})
+    </insert>
+
+    <!-- 단일 트윗 조회 -->
+    <select id="findById" resultType="com.korit.communityback.domain.tweet.Tweet">
+        select
+            tweet_id,
+            user_id,
+            content,
+            image_url,
+            created_at
+        from tweet_tb
+        where tweet_id = #{tweetId}
+    </select>
+
+    <select id="findByUserId" resultType="com.korit.communityback.domain.tweet.Tweet">
+        SELECT tweet_id, user_id, content, image_url, created_at
+        FROM tweet_tb
+        WHERE user_id = #{userId}
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 트윗 내용 수정 -->
+    <update id="updateTweet">
+        update
+            tweet_tb
+        set
+        <if test="content != null">
+            content = #{content},
+        </if>
+        <if test="imageUrl != null">
+            image_url = #{imageUrl},
+        </if>
+        tweet_id = tweet_id
+        where tweet_id = #{tweetId}
+    </update>
+
+    <!-- 트윗 삭제 -->
+    <delete id="deleteTweetByIds">
+        delete from tweet_tb
+        where tweet_id in
+        <foreach item="tweetId" collection="tweetIds" open="(" close=")" separator=",">
+            #{tweetId}
+        </foreach>
+    </delete>
+
+</mapper>

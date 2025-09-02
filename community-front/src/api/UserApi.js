@@ -6,13 +6,13 @@ export const reqSearchUser = ({page, size, searchText}) => api.get("/api/admin/u
 
 export const reqRegisterUser = (data) => api.post("/api/admin/users", data, {
     headers: {
-        "Content-Type": "multipart/for-data"
+        "Content-Type": "multipart/form-data"
     }
 });
 
-export const reqModifyUser = (data) => api.post("/api/admin/users.modify", data, {
+export const reqModifyUser = (data) => api.post("/api/admin/users/modify", data, {
     headers: {
-        "Content-Type": "multipart/for-data"
+        "Content-Type": "multipart/form-data"
     }
 });
 

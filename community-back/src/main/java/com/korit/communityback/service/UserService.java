@@ -4,7 +4,7 @@ import com.korit.communityback.domain.user.User;
 import com.korit.communityback.domain.user.UserMapper;
 import com.korit.communityback.domain.userRole.UserRole;
 import com.korit.communityback.domain.userRole.UserRoleMapper;
-import com.korit.communityback.dto.reponse.PaginationRespDto;
+import com.korit.communityback.dto.response.PaginationRespDto;
 import com.korit.communityback.dto.user.UserModifyReqDto;
 import com.korit.communityback.dto.user.UserRegisterReqDto;
 import com.korit.communityback.dto.user.UserSearchReqDto;

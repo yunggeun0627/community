@@ -131,9 +131,14 @@ function LeftSideBarLayout(props) {
     
     const handleLogout = (e) => {
         e.stopPropagation(); // 이벤트 버블 방지
-        localStorage.removeItem("AccessToken");
-        setIsLoggedIn(false);
-        navigate("/auth/login");
+        try {
+            localStorage.removeItem("AccessToken");
+            setIsLoggedIn(false);
+            navigate("/auth/login");
+        } catch (error) {
+            console.error("로그아웃 중 오류 발생:", error);
+            alert("로그아웃에 실패했습니다. 다시 시도해주세요.");
+        }
     };
 
     return (

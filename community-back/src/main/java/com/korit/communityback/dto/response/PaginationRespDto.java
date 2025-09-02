@@ -1,4 +1,4 @@
-package com.korit.communityback.dto.reponse;
+package com.korit.communityback.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

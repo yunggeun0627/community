@@ -26,7 +26,7 @@ function TweetBox({ onTweet, onAction }) {
     const handleIconClick = (type) => {
         if (onAction) onAction(type);
     }
-    
+
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {

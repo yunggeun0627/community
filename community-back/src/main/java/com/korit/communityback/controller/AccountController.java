@@ -1,6 +1,6 @@
 package com.korit.communityback.controller;
 
-import com.korit.communityback.dto.reponse.ResponseDto;
+import com.korit.communityback.dto.response.ResponseDto;
 import com.korit.communityback.security.model.PrincipalUser;
 import com.korit.communityback.service.AccountService;
 import lombok.RequiredArgsConstructor;

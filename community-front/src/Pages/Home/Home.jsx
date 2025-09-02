@@ -1,40 +1,66 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 /** @jsxImportSource @emotion/react */
 import * as s from './styles.js';
 import TweetBox from '../TweetBox/TweetBox.jsx';
 import TweetCard from '../TweetCard/TweetCard.jsx';
+import { reqPostTweet, reqTweets } from '../../api/tweetApi.js';
+import { reqFollowing } from '../../api/followApi.js';
 
 function Home({ onScrollToNew }) {
     const [tab, setTab] = useState("forYou");
     const [tweets, setTweets] = useState([]);
+    const [serverTweets, setServerTweets] = useState([]); // 백엔드에서 받아온 트윗
 
-    const allTweets = [
-        { id: 1, content: "전체 글 1", retweets: 0 },
-        { id: 2, content: "전체 글 2", retweets: 0 },
-        { id: 3, content: "전체 글 3", retweets: 0 },
-    ];
+    // 서버 트윗 가져오기 (tab 변경 시)
+    useEffect(() => {
+        const fetchTweets = async () => {
+            try {
+                let res;
+                if (tab === "forYou") {
+                    res = await reqTweets();
+                } else {
+                    res = await reqFollowing();
+                }
 
-    const followingTweets = [
-        { id: 101, content: "팔로우 글 1", retweets: 0 },
-        { id: 102, content: "팔로우 글 2", retweets: 0 },
-    ];
+                // res.data가 배열인지 체크, 아니라면 객체에서 배열 추출
+                const dataArray = Array.isArray(res.data)
+                    ? res.data
+                    : res.data?.tweets || [];
 
-    
-
-    const displayedTweets = tab === "forYou" ? allTweets : followingTweets;
-
-    const handleNewTweet = (tweet) => {
-        setTweets((prev) => [tweet, ...prev]);
-        setTimeout(() => {
-            if (onScrollToNew) {
-                onScrollToNew();
+                setServerTweets(dataArray);
+            } catch (err) {
+                console.error("트윗 가져오기 실패", err);
+                setServerTweets([]);
             }
-        }, 100);
+        };
+
+        fetchTweets();
+    }, [tab]);
+
+    // 새 트윗 등록
+    const handleNewTweet = async (tweetData) => {
+        try {
+            const res = await reqPostTweet(tweetData);
+            // 새 트윗은 항상 위로 추가
+            setTweets((prev) => [res.data, ...prev]);
+            setTimeout(() => {
+                if (onScrollToNew) onScrollToNew();
+            }, 100);
+        } catch (err) {
+            console.error("트윗 등록 실패", err);
+        }
     };
 
     const handleAction = (e) => {
         alert(`${e} 버튼 클릭!`);
     };
+
+    // serverTweets가 배열이 아닌 경우에도 안전하게 filter
+    const filteredServerTweets = Array.isArray(serverTweets)
+        ? serverTweets.filter(st => !tweets.some(t => t.id === st.id))
+        : [];
+
+    const displayedTweets = [...tweets, ...filteredServerTweets];
 
     return (
         <div css={s.layout}>
@@ -52,11 +78,9 @@ function Home({ onScrollToNew }) {
                     Following
                 </button>
             </div>
-            
+
             <TweetBox onTweet={handleNewTweet} onAction={handleAction} />
-            {tweets.map((tweet) => (
-                <TweetCard key={tweet.id} tweet={tweet} /> 
-            ))}
+
             {displayedTweets.map((tweet) => (
                 <TweetCard key={tweet.id} tweet={tweet} />
             ))}

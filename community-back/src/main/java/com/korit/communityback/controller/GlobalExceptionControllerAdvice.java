@@ -1,7 +1,7 @@
 package com.korit.communityback.controller;
 
 import com.korit.communityback.dto.error.SimpleErrorDto;
-import com.korit.communityback.dto.reponse.ResponseDto;
+import com.korit.communityback.dto.response.ResponseDto;
 import com.korit.communityback.exception.auth.LoginException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;

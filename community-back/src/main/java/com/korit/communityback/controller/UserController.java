@@ -1,8 +1,8 @@
 package com.korit.communityback.controller;
 
 import com.korit.communityback.domain.user.User;
-import com.korit.communityback.dto.reponse.PaginationRespDto;
-import com.korit.communityback.dto.reponse.ResponseDto;
+import com.korit.communityback.dto.response.PaginationRespDto;
+import com.korit.communityback.dto.response.ResponseDto;
 import com.korit.communityback.dto.user.UserModifyReqDto;
 import com.korit.communityback.dto.user.UserRegisterReqDto;
 import com.korit.communityback.dto.user.UserSearchReqDto;
