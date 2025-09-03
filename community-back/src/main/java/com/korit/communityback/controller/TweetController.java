@@ -21,6 +21,7 @@ public class TweetController {
     @GetMapping("/tweets")
     public ResponseEntity<ResponseDto<List<TweetDto>>> getTweets() {
         List<TweetDto> tweets = tweetService.getAllTweets();
+//        System.out.println(tweets);
         return ResponseEntity.ok(ResponseDto.success(tweets));
     }
 
@@ -28,6 +29,7 @@ public class TweetController {
     @GetMapping("/tweets/user/{userId}")
     public ResponseEntity<ResponseDto<List<TweetDto>>> getTweetsByUser(@PathVariable Integer userId) {
         List<TweetDto> tweets = tweetService.getTweetsByUser(userId);
+//        System.out.println(tweets);
         return ResponseEntity.ok(ResponseDto.success(tweets));
     }
 
@@ -35,6 +37,7 @@ public class TweetController {
     @PostMapping("/tweets")
     public ResponseEntity<ResponseDto<TweetDto>> postTweet(@RequestBody TweetReqDto dto) {
         TweetDto createdTweet = tweetService.createTweet(dto);
+//        System.out.println(dto);
         return ResponseEntity.ok(ResponseDto.success(createdTweet));
     }
 }

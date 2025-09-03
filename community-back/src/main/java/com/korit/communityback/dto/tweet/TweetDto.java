@@ -25,7 +25,7 @@ public class TweetDto {
                 .userId(tweet.getUserId())
                 .content(tweet.getContent())
                 .imageUrl(tweet.getImageUrl())
-                .createdAt(tweet.getCreatedAt())
+                .createdAt(LocalDateTime.now())
                 .build();
     }
 }

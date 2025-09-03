@@ -47,7 +47,6 @@ public class TweetService {
                 .content(dto.getContent())
                 .imageUrl(dto.getImageUrl())
                 .build();
-
         tweetMapper.insert(tweet);
 
         // DB에 insert 후, 생성된 엔티티를 DTO로 변환해 반환
