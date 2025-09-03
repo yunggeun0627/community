@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 /** @jsxImportSource @emotion/react */
 import * as s from './styles.js';
 
-function Explore({ onAction }) {
+function Explore(props) {
     const [query, setQuery] = useState("");
 
     const handleIconClick = (type) => {

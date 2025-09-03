@@ -3,7 +3,7 @@ import React from 'react';
 import * as s from './styles.js';
 import { FaAt, FaHeart, FaRetweet } from 'react-icons/fa';
 
-function Notification({ onAction }) {
+function Notification(props) {
     const notifications = [
         { id: 1, user: "아이네", type: "like", content: "liked your tweet" },
         { id: 2, user: "징버거", type: "retweet", content: "retweeted your tweet" },

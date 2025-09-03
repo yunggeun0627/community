@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 /** @jsxImportSource @emotion/react */
 import * as s from './styles.js';
 
-function FollowBox({ suggestions, onFollowChange }) {
+function FollowBox(props) {
     const [users, setUsers] = useState(
         suggestions.map(user => ({ ...user, isFollowed: false }))
     );

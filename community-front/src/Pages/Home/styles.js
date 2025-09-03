@@ -15,7 +15,6 @@ export const mainContainer = css`
     padding: 20px;
     border-left: 1px solid #e6ecf0;
     border-right: 1px solid #e6ecf0;
-    /* ✅ 스크롤 제거 */
     height: auto;
     overflow: visible;
 `;
@@ -52,4 +51,18 @@ export const followButton = css`
     border: none;
     cursor: pointer;
     font-size: 0.9rem;
+`;
+
+export const emojiPopup = css`
+    position: absolute;
+    bottom: 50px; // commentBox 기준 위쪽에 표시
+    left: 0;
+    z-index: 1000;
+    background: #fff;
+    border: 1px solid #e6ecf0;
+    border-radius: 12px;
+    padding: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    width: 300px;
+    height: 350px;
 `;

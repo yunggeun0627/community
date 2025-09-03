@@ -5,38 +5,58 @@ import { FaPen } from 'react-icons/fa';
 import { CiImageOn } from 'react-icons/ci';
 import { RiEmotionHappyLine } from "react-icons/ri";
 import { AiOutlineBars } from "react-icons/ai";
+import EmojiPicker from 'emoji-picker-react';
 
-function TweetBox({ onTweet, onAction }) {
+
+function TweetBox(props) {
+    const { onTweet, onAction } = props;
     const [content, setContent] = useState("");
     const [image, setImage] = useState(null);
+    const [showEmoji, setShowEmoji] = useState(false);
+    const [showPoll, setShowPoll] = useState(false);
+    const [pollOptions, setPollOptions] = useState(["", ""]);
 
     const handleSubmit = () => {
-        if (!content) return;
-        onTweet({
+        if (!content && !image && !pollOptions.some((opt) => opt)) return;
+
+        const tweetData = {
             id: Date.now(),
             user: "Me",
             content,
-            image,
+            image_url: image,
+            poll: showPoll
+                ? {
+                    options: pollOptions.filter((opt) => opt),
+                    endTime: null,
+                }
+                : null,
             likes: 0,
-            retweets: 0
-        });
-        setContent("");
-    }
+            retweets: 0,
+        };
 
-    const handleIconClick = (type) => {
-        if (onAction) onAction(type);
-    }
+        if (onTweet) onTweet(tweetData);
+
+        setContent("");
+        setImage(null);
+        setShowPoll(false);
+        setPollOptions(["", ""]);
+        setShowEmoji(false);
+    };
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onloadend = () => {
-                setImage(reader.result);
-            };
+            reader.onloadend = () => setImage(reader.result);
             reader.readAsDataURL(file);
         }
-    }
+    };
+
+    const handleEmojiSelect = (emojiData) => {
+        setContent((prev) => prev + emojiData.emoji);
+        setShowEmoji(false);
+    };
+
     return (
         <div css={s.box}>
             <textarea
@@ -52,6 +72,49 @@ function TweetBox({ onTweet, onAction }) {
                 </div>
             )}
 
+            {showPoll && (
+                <div css={s.pollBox}>
+                    {pollOptions.map((opt, idx) => (
+                        <input
+                            key={idx}
+                            css={s.pollInput}
+                            type="text"
+                            placeholder={`Option ${idx + 1}`}
+                            value={opt}
+                            onChange={(e) =>
+                                setPollOptions((prev) => {
+                                    const arr = [...prev];
+                                    arr[idx] = e.target.value;
+                                    return arr;
+                                })
+                            }
+                        />
+                    ))}
+
+                    <div css={s.pollActionsRow}>
+                        <button
+                            css={s.addpollOption}
+                            onClick={() => setPollOptions((prev) => [...prev, ""])}
+                        >
+                            + Add Option
+                        </button>
+
+                        <button
+                            css={s.submitPollButton}
+                            onClick={() => {
+                                handleSubmit({
+                                    content,
+                                    image,
+                                    poll: { options: pollOptions },
+                                });
+                            }}
+                        >
+                            Post Poll
+                        </button>
+                    </div>
+                </div>
+            )}
+
             <div css={s.actionsRow}>
                 <div css={s.iconGroup}>
                     <label>
@@ -63,12 +126,26 @@ function TweetBox({ onTweet, onAction }) {
                         />
                         <CiImageOn css={s.iconButton} />
                     </label>
-                    <button css={s.iconButton} onClick={() => handleIconClick("poll")}>
+
+                    <button
+                        css={s.iconButton}
+                        onClick={() => setShowPoll((prev) => !prev)}
+                    >
                         <AiOutlineBars />
                     </button>
-                    <button css={s.iconButton} onClick={() => handleIconClick("emoji")}>
+
+                    <button
+                        css={s.iconButton}
+                        onClick={() => setShowEmoji((prev) => !prev)}
+                    >
                         <RiEmotionHappyLine />
                     </button>
+
+                    {showEmoji && (
+                        <div css={s.emojiPopup}>
+                            <EmojiPicker onEmojiClick={handleEmojiSelect} />
+                        </div>
+                    )}
                 </div>
 
                 <button css={s.button} type="button" onClick={handleSubmit}>

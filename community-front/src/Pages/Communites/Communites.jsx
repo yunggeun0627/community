@@ -2,7 +2,7 @@ import React from 'react';
 /** @jsxImportSource @emotion/react */
 import * as s from './styles.js';
 
-function Communites({ onAction }) {
+function Communites(props) {
     const communities = ["이파리", "파스텔"];
 
     const handleClick = (type) => {

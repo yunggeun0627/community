@@ -2,13 +2,18 @@
 import { useState } from 'react';
 import * as s from './styles';
 
-function RightSideBarLayout({ suggestions = [] }) {
+function RightSideBarLayout(props) {
+    const { suggestions = [] } = props;
     const [followedUsers, setFollowedUsers] = useState([]);
-    const [recommendations, setRecommendations] = useState(suggestions.length ? suggestions : [
-        { id: 1, name: "아이네", username: "@ine" },
-        { id: 2, name: "아야츠노 유니", username: "@ayatsunoyuni" },
-        { id: 3, name: "플레이브", username: "@plave_offcial" },
-    ]);
+    const [recommendations, setRecommendations] = useState(
+        suggestions.length
+            ? suggestions
+            : [
+                { id: 1, name: "아이네", username: "@ine" },
+                { id: 2, name: "아야츠노 유니", username: "@ayatsunoyuni" },
+                { id: 3, name: "플레이브", username: "@plave_offcial" },
+            ]
+    );
 
     const trends = [
         { id: 1, name: "이세계아이돌", tweet: "600K" },

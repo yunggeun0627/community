@@ -2,7 +2,7 @@ import React from 'react';
 /** @jsxImportSource @emotion/react */
 import * as s from './styles.js';
 
-function BookMark({ onAction }) {
+function BookMark(props) {
     const bookmarks = [
         { id: 1, content: "차세돌" },
         { id: 2, content: "마세돌" }

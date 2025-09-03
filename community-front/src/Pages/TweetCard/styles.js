@@ -100,6 +100,29 @@ export const commentInput = css`
     resize: none;
 `;
 
+export const emojiPopup = css`
+    position: absolute; // 부모 commentBox 기준으로 위치
+    bottom: 50px; // textarea 위쪽에 표시
+    left: 0;
+    z-index: 1000; // 다른 요소 위로 표시
+    background: #fff;
+    border: 1px solid #e6ecf0;
+    border-radius: 12px;
+    padding: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+`;
+
+export const iconButton = css`
+    cursor: pointer;
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    font-size: 18px;
+`;
+
 export const commentButton = css`
     padding: 6px 12px;
     background-color: #1da1f2;

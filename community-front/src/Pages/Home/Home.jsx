@@ -6,12 +6,15 @@ import TweetCard from '../TweetCard/TweetCard.jsx';
 import { reqPostTweet, reqTweets } from '../../api/tweetApi.js';
 import { reqFollowing } from '../../api/followApi.js';
 
-function Home({ onScrollToNew }) {
+function Home(props) {
     const [tab, setTab] = useState("forYou");
     const [tweets, setTweets] = useState([]);
     const [serverTweets, setServerTweets] = useState([]); // 백엔드에서 받아온 트윗
 
-    // 서버 트윗 가져오기 (tab 변경 시)
+    const onScrollToNew = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
     useEffect(() => {
         const fetchTweets = async () => {
             try {
@@ -22,12 +25,18 @@ function Home({ onScrollToNew }) {
                     res = await reqFollowing();
                 }
 
-                // res.data가 배열인지 체크, 아니라면 객체에서 배열 추출
-                const dataArray = Array.isArray(res.data)
-                    ? res.data
-                    : res.data?.tweets || [];
+                const dataArray = Array.isArray(res.data.body)
+                    ? res.data.body
+                    : res.data.body
+                        ? [res.data.body]
+                        : [];
 
-                setServerTweets(dataArray);
+                const normalized = dataArray.map((t) => ({
+                    ...t,
+                    tweetId: t.tweetId ?? t.tweet_id,
+                }));
+
+                setServerTweets(normalized);
             } catch (err) {
                 console.error("트윗 가져오기 실패", err);
                 setServerTweets([]);
@@ -37,15 +46,20 @@ function Home({ onScrollToNew }) {
         fetchTweets();
     }, [tab]);
 
-    // 새 트윗 등록
     const handleNewTweet = async (tweetData) => {
+        if (!tweetData) return;
         try {
             const res = await reqPostTweet(tweetData);
-            // 새 트윗은 항상 위로 추가
-            setTweets((prev) => [res.data, ...prev]);
-            setTimeout(() => {
-                if (onScrollToNew) onScrollToNew();
-            }, 100);
+            const body = res.data.body;
+
+            const newTweet = {
+                ...body,
+                tweetId: body.tweetId ?? body.tweet_id,
+            };
+
+            setTweets((prev) => [newTweet, ...prev]);
+
+            if (onScrollToNew) onScrollToNew();
         } catch (err) {
             console.error("트윗 등록 실패", err);
         }
@@ -55,10 +69,9 @@ function Home({ onScrollToNew }) {
         alert(`${e} 버튼 클릭!`);
     };
 
-    // serverTweets가 배열이 아닌 경우에도 안전하게 filter
-    const filteredServerTweets = Array.isArray(serverTweets)
-        ? serverTweets.filter(st => !tweets.some(t => t.id === st.id))
-        : [];
+    const filteredServerTweets = serverTweets.filter(
+        (st) => !tweets.some((t) => t.tweetId === st.tweetId)
+    );
 
     const displayedTweets = [...tweets, ...filteredServerTweets];
 
@@ -81,8 +94,11 @@ function Home({ onScrollToNew }) {
 
             <TweetBox onTweet={handleNewTweet} onAction={handleAction} />
 
-            {displayedTweets.map((tweet) => (
-                <TweetCard key={tweet.id} tweet={tweet} />
+            {displayedTweets.map((tweet, idx) => (
+                <TweetCard
+                    key={tweet.tweetId ? `tweet-${tweet.tweetId}` : `fallback-${idx}`}
+                    tweet={tweet} // TweetCard 내부에서 poll, image, emoji 처리
+                />
             ))}
         </div>
     );

@@ -2,7 +2,7 @@ import React from 'react';
 /** @jsxImportSource @emotion/react */
 import * as s from './styles.js';
 
-function More({ onAction }) {
+function More(props) {
     const items = ["Settings", "Help Center", "Log out"];
 
     const handleClick = (type) => {

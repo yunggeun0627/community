@@ -2,7 +2,7 @@ import React from 'react';
 /** @jsxImportSource @emotion/react */
 import * as s from './styles.js';
 
-function Premium({ onAction }) {
+function Premium(props) {
     const handleClick = (type) => {
         if (onAction) onAction(type);
     };
