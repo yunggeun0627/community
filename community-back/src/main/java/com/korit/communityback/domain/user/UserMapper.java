@@ -15,4 +15,7 @@ public interface UserMapper {
     int updateProfileImgPathById(@Param("userId") Integer userId, @Param("path") String path);
     int update(User user);
     int deleteByIds(List<Integer> UserIds);
+
+    List<User> findFollowingUsers(@Param("userId") Integer userId);
+    List<User> findRecommendedUsers(@Param("userId") Integer userId);
 }

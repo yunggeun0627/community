@@ -161,4 +161,61 @@
             or full_name like concat ('%', #{searchText}, '%')
             or email like concat ('%', #{searchText}, '%')
     </select>
+
+    <!-- 내가 팔로잉 중인 유저 -->
+    <select id="findFollowingUsers" resultMap="UserMap" parameterType="int">
+        select
+            ut.user_id,
+            ut.username,
+            ut.password,
+            ut.full_name,
+            ut.email,
+            ut.profile_img_path,
+            ut.provider,
+            ut.provider_id,
+
+            urt.user_role_id,
+            urt.user_id AS urt_user_id,
+            urt.role_id AS urt_role_id,
+
+            rt.role_id,
+            rt.role_name
+        from
+            user_tb ut
+            left join follow_tb f ON ut.user_id = f.following_id
+            left outer join user_role_tb urt ON urt.user_id = ut.user_id
+            left outer join role_tb rt ON rt.role_id = urt.role_id
+        where
+            f.follower_id = #{userId}
+    </select>
+
+    <!-- 추천 유저 (팔로우하지 않은 유저) -->
+    <select id="findRecommendedUsers" resultMap="UserMap" parameterType="int">
+        select
+            ut.user_id,
+            ut.username,
+            ut.password,
+            ut.full_name,
+            ut.email,
+            ut.profile_img_path,
+            ut.provider,
+            ut.provider_id,
+
+            urt.user_role_id,
+            urt.user_id AS urt_user_id,
+            urt.role_id AS urt_role_id,
+
+            rt.role_id,
+            rt.role_name
+        from
+            user_tb ut
+            left outer join user_role_tb urt ON urt.user_id = ut.user_id
+            left outer join role_tb rt ON rt.role_id = urt.role_id
+        where
+            ut.user_id NOT IN (
+            SELECT following_id
+            FROM follow_tb
+            WHERE follower_id = #{userId}
+        )
+    </select>
 </mapper>

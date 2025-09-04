@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.korit.communityback.domain.follow.FollowMapper">
+
+    <insert id="insertFollow">
+        INSERT INTO follow_tb (follower_id, following_id)
+        VALUES (#{followerId}, #{followingId})
+    </insert>
+
+    <delete id="deleteFollow">
+        DELETE FROM follow_tb
+        WHERE follower_id = #{followerId} AND following_id = #{followingId}
+    </delete>
+
+    <select id="existsFollow" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM follow_tb
+        WHERE follower_id = #{followerId} AND following_id = #{followingId}
+    </select>
+
+</mapper>

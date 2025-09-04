@@ -79,4 +79,12 @@
         </foreach>
     </delete>
 
+    <delete id="deleteByIds">
+        DELETE FROM tweet_tb
+        WHERE tweet_id IN
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
 </mapper>

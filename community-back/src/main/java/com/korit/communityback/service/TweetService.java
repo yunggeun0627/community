@@ -57,4 +57,9 @@ public class TweetService {
     private Integer getCurrentUserIdFromSession() {
         return 1; // 테스트용, 실제 구현 필요
     }
+
+    @Transactional
+    public void deleteTweet(List<Integer> tweetId) {
+        tweetMapper.deleteByIds(tweetId);
+    }
 }

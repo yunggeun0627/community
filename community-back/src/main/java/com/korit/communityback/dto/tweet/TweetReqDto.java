@@ -19,7 +19,7 @@ public class TweetReqDto {
         return Tweet.builder()
                 .userId(userId)
                 .content(content)
-                .imageUrl(imageUrl)
+                .imageUrl(imageUrl != null && imageUrl.length() > 255 ? imageUrl.substring(0, 255) : imageUrl)
                 .build();
     }
 }

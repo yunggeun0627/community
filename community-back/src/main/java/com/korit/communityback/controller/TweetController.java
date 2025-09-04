@@ -5,6 +5,7 @@ import com.korit.communityback.dto.tweet.TweetDto;
 import com.korit.communityback.dto.tweet.TweetReqDto;
 import com.korit.communityback.service.TweetService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +38,17 @@ public class TweetController {
     @PostMapping("/tweets")
     public ResponseEntity<ResponseDto<TweetDto>> postTweet(@RequestBody TweetReqDto dto) {
         TweetDto createdTweet = tweetService.createTweet(dto);
-//        System.out.println(dto);
+        System.out.println(dto);
         return ResponseEntity.ok(ResponseDto.success(createdTweet));
+    }
+
+    @DeleteMapping("/tweets/{id}")
+    public ResponseEntity<?> deleteTweet(@PathVariable List<Integer> id) {
+        try {
+            tweetService.deleteTweet(id);
+            return ResponseEntity.ok().body("삭제 성공");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("삭제 실패");
+        }
     }
 }

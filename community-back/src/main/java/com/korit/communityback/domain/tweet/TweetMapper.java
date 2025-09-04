@@ -12,5 +12,5 @@ public interface TweetMapper {
     void insert(Tweet tweet);
     Tweet findById(@Param("tweetId") Integer tweetId);
     List<Tweet> findByUserId(@Param("userId") Integer userId);
-
+    int deleteByIds(List<Integer> TweetIds);
 }
