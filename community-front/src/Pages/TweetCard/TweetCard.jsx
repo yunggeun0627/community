@@ -3,9 +3,10 @@ import EmojiPicker from 'emoji-picker-react';
 import * as s from './styles.js';
 import React, { useState } from 'react';
 import { FaHeart, FaRegComment, FaRegHeart, FaRetweet } from 'react-icons/fa';
+import { HiEllipsisVertical } from 'react-icons/hi2';
 
 function TweetCard(props) {
-    const { tweet = {} } = props;
+    const { tweet = {}, onDelete } = props;
     const [liked, setLiked] = useState(false);
     const [retweet, setRetweet] = useState(false);
     const [comment, setComment] = useState("");
@@ -43,8 +44,17 @@ function TweetCard(props) {
 
     return (
         <div css={s.card}>
-            <div css={s.user}>
-                작성자: {tweet.userId} · {tweet.createdAt && new Date(tweet.createdAt).toLocaleString()}
+            <div css={s.header}>
+                <div css={s.user}>
+                    작성자: {tweet.userId} · {tweet.createdAt && new Date(tweet.createdAt).toLocaleString()}
+                </div>
+                
+                {/* 🔥 삭제 버튼 추가 */}
+                {onDelete && (
+                    <button onClick={() => onDelete(tweet.tweetId)} css={s.deleteButton}>
+                        <HiEllipsisVertical size={20} />
+                    </button>
+                )}
             </div>
 
             <div css={s.content}>{tweet.content}</div>

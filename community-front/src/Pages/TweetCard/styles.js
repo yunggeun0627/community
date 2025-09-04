@@ -9,6 +9,35 @@ export const card = css`
     background: #fff;
 `;
 
+export const header = css`
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* 작성자 = 왼쪽 / 버튼 = 오른쪽 */
+    margin-bottom: 8px;
+`;
+
+export const deleteButton = css`
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: background 0.2s ease;
+
+    &:hover {
+        background: #f0f0f0;
+    }
+
+    svg {
+        color: #555; /* 아이콘 색상 */
+    }
+`;
+
 export const user = css`
     font-weight: 600;
     font-size: 15px;

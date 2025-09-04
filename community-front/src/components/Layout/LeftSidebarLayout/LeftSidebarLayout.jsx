@@ -19,6 +19,8 @@ function LeftSideBarLayout(props) {
     const [showMenu, setShowMenu] = useState(false);
     const pathname = useLocation().pathname;
     const [avatar, setAvatar] = useState("");
+    const [showPostBox, setShowPostBox] = useState(false);
+
     const MENUS = [
         {
             id: 1,
@@ -112,13 +114,22 @@ function LeftSideBarLayout(props) {
         },
     ];
 
+    // 페이지 로드 시 localStorage에서 이미지 불러오기
+    useEffect(() => {
+        const savedAvatar = localStorage.getItem("sidebarAvatar");
+        if (savedAvatar) setAvatar(savedAvatar);
+    }, []);
+
+    // 기존 handleAvatarChange 수정 (localStorage 저장 추가)
     const handleAvatarChange = (e) => {
         const file = e.target.files && e.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
                 if (reader.result) {
-                    setAvatar(reader.result.toString());
+                    const resultStr = reader.result.toString();
+                    setAvatar(resultStr);
+                    localStorage.setItem("sidebarAvatar", resultStr); // 저장
                 }
             };
             reader.readAsDataURL(file);
@@ -128,7 +139,7 @@ function LeftSideBarLayout(props) {
     const toggleMenu = () => {
         setShowMenu(!showMenu);
     };
-    
+
     const handleLogout = (e) => {
         e.stopPropagation(); // 이벤트 버블 방지
         try {
@@ -140,6 +151,11 @@ function LeftSideBarLayout(props) {
             alert("로그아웃에 실패했습니다. 다시 시도해주세요.");
         }
     };
+
+    const handlePostButtonClick = () => {
+        setShowPostBox(!showPostBox); // 토글
+    };
+
 
     return (
         <div css={s.layout}>

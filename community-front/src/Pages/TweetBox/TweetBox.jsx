@@ -7,7 +7,6 @@ import { RiEmotionHappyLine } from "react-icons/ri";
 import { AiOutlineBars } from "react-icons/ai";
 import EmojiPicker from 'emoji-picker-react';
 
-
 function TweetBox(props) {
     const { onTweet, onAction } = props;
     const [content, setContent] = useState("");

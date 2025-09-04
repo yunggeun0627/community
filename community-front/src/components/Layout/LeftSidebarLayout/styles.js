@@ -66,6 +66,11 @@ export const menu = css`
     }
 `;
 
+export const postButtonWrapper = css`
+    position: relative;
+    margin-top: 10px;
+`;
+
 export const postButton = css`
     display: flex;
     align-items: center;
@@ -85,6 +90,38 @@ export const postButton = css`
     &:hover {
         background-color: #1a8cd8;
     }
+`;
+
+export const postBox = css`
+    position: absolute;
+    top: -10px; // 버튼 위로 띄우고 싶으면 조정
+    left: 0;
+    width: 250px;
+    padding: 10px;
+    border: 1px solid #e6ecf0;
+    border-radius: 12px;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+`;
+
+export const postTextarea = css`
+    width: 100%;
+    height: 80px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 5px;
+    resize: none;
+`;
+
+export const submitPostButton = css`
+    margin-top: 6px;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 8px;
+    background-color: #1da1f2;
+    color: #fff;
+    cursor: pointer;
 `;
 
 export const profileBox = css`

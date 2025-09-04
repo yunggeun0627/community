@@ -1,10 +1,11 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 /** @jsxImportSource @emotion/react */
 import * as s from './styles.js';
 import LeftSideBarLayout from '../LeftSidebarLayout/LeftSidebarLayout.jsx';
 import RightSideBarLayout from '../RightSidebarLayout/RightSidebarLayout.jsx';
 
 function MainLayout({ children }) {
+    const [showPostBox, setShowPostBox] = useState(false);
     // window 스크롤 함수
     const scrollToNewContent = useCallback(() => {
         window.scrollTo({
@@ -15,12 +16,16 @@ function MainLayout({ children }) {
 
     return (
         <div css={s.layout}>
-            <LeftSideBarLayout />
+            <LeftSideBarLayout setShowPostBox={setShowPostBox} />
             <div css={s.container}>
-                {React.cloneElement(children, {
-                    onScrollToNew: scrollToNewContent
-                })}
+                {React.isValidElement(children) &&
+                    React.cloneElement(children, {
+                        showPostBox,
+                        setShowPostBox,
+                        onScrollToNew: scrollToNewContent,
+                    })}
             </div>
+
             <RightSideBarLayout />
         </div>
     );

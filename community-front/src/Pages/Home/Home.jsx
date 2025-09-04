@@ -3,13 +3,15 @@ import React, { useEffect, useState } from 'react';
 import * as s from './styles.js';
 import TweetBox from '../TweetBox/TweetBox.jsx';
 import TweetCard from '../TweetCard/TweetCard.jsx';
-import { reqPostTweet, reqTweets } from '../../api/tweetApi.js';
+import { reqDeleteTweet, reqPostTweet, reqTweets } from '../../api/tweetApi.js';
 import { reqFollowing } from '../../api/followApi.js';
+import { FaPenSquare } from 'react-icons/fa';
 
 function Home(props) {
     const [tab, setTab] = useState("forYou");
     const [tweets, setTweets] = useState([]);
     const [serverTweets, setServerTweets] = useState([]); // 백엔드에서 받아온 트윗
+    const [showPostBox, setShowPostBox] = useState(false);
 
     const onScrollToNew = () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -60,6 +62,7 @@ function Home(props) {
             setTweets((prev) => [newTweet, ...prev]);
 
             if (onScrollToNew) onScrollToNew();
+            setShowPostBox(false); // 제출 후 창 닫기
         } catch (err) {
             console.error("트윗 등록 실패", err);
         }
@@ -67,6 +70,19 @@ function Home(props) {
 
     const handleAction = (e) => {
         alert(`${e} 버튼 클릭!`);
+    };
+
+    // 🔥 삭제 핸들러 추가
+    const handleDeleteTweet = async (tweetId) => {
+        try {
+            await reqDeleteTweet(tweetId);
+
+            // 프론트 상태에서도 삭제
+            setTweets((prev) => prev.filter((t) => t.tweetId !== tweetId));
+            setServerTweets((prev) => prev.filter((t) => t.tweetId !== tweetId));
+        } catch (err) {
+            console.error("트윗 삭제 실패", err);
+        }
     };
 
     const filteredServerTweets = serverTweets.filter(
@@ -94,10 +110,38 @@ function Home(props) {
 
             <TweetBox onTweet={handleNewTweet} onAction={handleAction} />
 
+            {/* 🔥 게시물 작성창 토글 */}
+            {showPostBox && (
+                <div css={s.postBox}>
+                    <textarea
+                        css={s.postTextarea}
+                        placeholder="What's happening?"
+                    />
+                    <div css={s.postBoxActions}>
+                        <button
+                            css={s.submitPostButton}
+                            onClick={() => {
+                                handleNewTweet(document.querySelector('textarea').value);
+                                setShowPostBox(false);
+                            }}
+                        >
+                            Post
+                        </button>
+                        <button
+                            css={s.cancelPostButton}
+                            onClick={() => setShowPostBox(false)}
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            )}
+
             {displayedTweets.map((tweet, idx) => (
                 <TweetCard
                     key={tweet.tweetId ? `tweet-${tweet.tweetId}` : `fallback-${idx}`}
-                    tweet={tweet} // TweetCard 내부에서 poll, image, emoji 처리
+                    tweet={tweet}
+                    onDelete={handleDeleteTweet}
                 />
             ))}
         </div>

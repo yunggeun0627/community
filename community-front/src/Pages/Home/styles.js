@@ -45,6 +45,72 @@ export const activeTab = css`
     color: #1d9bf0;
 `;
 
+// 🔹 Post 버튼
+export const postButton = css`
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 9999px;
+    background-color: #1d9bf0;
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 10px;
+`;
+
+// 🔹 게시물 작성창 컨테이너
+export const postBox = css`
+    width: 100%;
+    max-width: 600px;
+    border: 1px solid #e6ecf0;
+    border-radius: 12px;
+    background-color: #fff;
+    padding: 10px;
+    margin-bottom: 20px;
+`;
+
+// 🔹 게시물 작성 textarea
+export const postTextarea = css`
+    width: 100%;
+    height: 100px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    padding: 8px;
+    resize: none;
+`;
+
+// 🔹 게시물 버튼 그룹
+export const postBoxActions = css`
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 6px;
+`;
+
+// 🔹 게시물 제출 버튼
+export const submitPostButton = css`
+    padding: 6px 12px;
+    border: none;
+    border-radius: 8px;
+    background-color: #1d9bf0;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 600;
+`;
+
+// 🔹 게시물 취소 버튼
+export const cancelPostButton = css`
+    padding: 6px 12px;
+    border: none;
+    border-radius: 8px;
+    background-color: #e6ecf0;
+    color: #536471;
+    cursor: pointer;
+    font-weight: 600;
+`;
+
 export const followButton = css`
     padding: 6px 12px;
     border-radius: 9999px;
