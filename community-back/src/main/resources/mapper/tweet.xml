@@ -15,32 +15,32 @@
 
     <!-- 전체 트윗 조회 -->
     <select id="findAll" resultType="com.korit.communityback.domain.tweet.Tweet">
-        select
-            tweet_id as tweetId,
-            user_id as userId,
+        SELECT
+            tweet_id AS tweetId,
+            user_id AS userId,
             content,
-            image_url as imageUrl,
-            created_at as createdAt
-        from tweet_tb
-        order by created_at desc
+            image_url AS imageUrl,
+            created_at AS createdAt
+        FROM tweet_tb
+        ORDER BY created_at DESC
     </select>
 
     <!-- 트윗 삽입 -->
-    <insert id="insert" useGeneratedKeys="true" keyProperty="tweetId">
-        insert into tweet_tb (user_id, content, image_url, created_at)
-        values (#{userId}, #{content}, #{imageUrl}, CURRENT_TIMESTAMP)
+    <insert id="insert" parameterType="com.korit.communityback.domain.tweet.Tweet" useGeneratedKeys="true" keyProperty="tweetId">
+        INSERT INTO tweet_tb (user_id, content, image_url, created_at)
+        VALUES (#{userId}, #{content}, #{imageUrl}, NOW())
     </insert>
 
     <!-- 단일 트윗 조회 -->
     <select id="findById" resultType="com.korit.communityback.domain.tweet.Tweet">
-        select
-            tweet_id as tweetId,
-            user_id as userId,
+        SELECT
+            tweet_id AS tweetId,
+            user_id AS userId,
             content,
-            image_url as imageUrl,
-            created_at as createdAt
-        from tweet_tb
-        where tweet_id = #{tweetId}
+            image_url AS imageUrl,
+            created_at AS createdAt
+        FROM tweet_tb
+        WHERE tweet_id = #{tweetId}
     </select>
 
     <!-- 유저별 트윗 조회 -->

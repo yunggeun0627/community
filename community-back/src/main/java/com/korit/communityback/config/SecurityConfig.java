@@ -41,9 +41,9 @@ public class SecurityConfig {
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         http.authorizeHttpRequests(auth -> {
+            auth.requestMatchers("/uploads/**").permitAll(); // ✅ 이미지 공개
             auth.requestMatchers("/oauth2/**").permitAll();
             auth.requestMatchers("/api/auth/**").permitAll();
-            auth.requestMatchers("/image/**").authenticated();
             auth.anyRequest().authenticated();
         });
 

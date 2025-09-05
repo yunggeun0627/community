@@ -38,24 +38,13 @@ public class TweetService {
     }
 
     @Transactional
-    public TweetDto createTweet(TweetReqDto dto) {
-        // 1️⃣ 로그인 정보에서 userId 가져오기
-        Integer currentUserId = getCurrentUserIdFromSession(); // 구현 필요
-
-        Tweet tweet = Tweet.builder()
-                .userId(currentUserId)       // 프론트에 의존하지 않고 서버에서 세팅
-                .content(dto.getContent())
-                .imageUrl(dto.getImageUrl())
-                .build();
+    public TweetDto createTweet(TweetReqDto dto, Integer userId) {
+        Tweet tweet = new Tweet();
+        tweet.setUserId(userId);             // 세션/토큰에서 가져온 로그인 ID
+        tweet.setContent(dto.getContent());
+        tweet.setImageUrl(dto.getImageUrl());
         tweetMapper.insert(tweet);
-
-        // DB에 insert 후, 생성된 엔티티를 DTO로 변환해 반환
         return TweetDto.fromEntity(tweet);
-    }
-
-    // 세션 또는 JWT에서 로그인한 유저 ID 가져오기
-    private Integer getCurrentUserIdFromSession() {
-        return 1; // 테스트용, 실제 구현 필요
     }
 
     @Transactional

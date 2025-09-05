@@ -19,7 +19,6 @@ public class PrincipalUser implements UserDetails, OAuth2User {
     private User user;
     private Map<String, Object> attributes;
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return user.getUserRoles()
@@ -30,16 +29,20 @@ public class PrincipalUser implements UserDetails, OAuth2User {
 
     @Override
     public String getPassword() {
-        return "";
+        return user.getPassword() != null ? user.getPassword() : "";
     }
 
     @Override
     public String getUsername() {
-        return "";
+        // username 컬럼이 있으면 그거 사용
+        return user.getUsername();
+        // 만약 username 없고 email이 유니크라면:
+        // return user.getEmail();
     }
 
     @Override
     public String getName() {
-        return "";
+        // OAuth2 로그인일 때 사용자 식별값 (일반 로그인과 다를 수 있음)
+        return user.getUsername();
     }
 }

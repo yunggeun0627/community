@@ -11,7 +11,7 @@ public class TweetReqDto {
     private Integer userId;
     private String content;
 
-    @JsonProperty("image_url")
+//    @JsonProperty("image_url")
     private String imageUrl;
 
     // DTO → 엔티티 변환

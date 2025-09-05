@@ -24,8 +24,14 @@ public class TweetDto {
                 .tweetId(tweet.getTweetId())
                 .userId(tweet.getUserId())
                 .content(tweet.getContent())
-                .imageUrl(tweet.getImageUrl())
-                .createdAt(LocalDateTime.now())
+                .imageUrl(tweet.getImageUrl() != null
+                        ? (tweet.getImageUrl().startsWith("http")
+                        ? tweet.getImageUrl()
+                        : tweet.getImageUrl().startsWith("/uploads/")
+                        ? "http://localhost:8080" + tweet.getImageUrl()
+                        : "http://localhost:8080/uploads/" + tweet.getImageUrl())
+                        : null)
+                .createdAt(tweet.getCreatedAt())
                 .build();
     }
 }
