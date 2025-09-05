@@ -36,6 +36,7 @@ function Home(props) {
                 const normalized = dataArray.map((t) => ({
                     ...t,
                     tweetId: t.tweetId ?? t.tweet_id,
+                    imageUrl: t.imageUrl ?? t.image_url, // ✅ DB에서 가져온 이미지도 반영
                 }));
 
                 setServerTweets(normalized);
@@ -52,17 +53,17 @@ function Home(props) {
         if (!tweetData) return;
         try {
             const res = await reqPostTweet(tweetData);
-            const body = res.data.body;
+            const body = res?.data;
 
             const newTweet = {
                 ...body,
                 tweetId: body.tweetId ?? body.tweet_id,
+                imageUrl: body.imageUrl // ✅ 백엔드에서 풀 URL 처리됨
             };
 
             setTweets((prev) => [newTweet, ...prev]);
-
             if (onScrollToNew) onScrollToNew();
-            setShowPostBox(false); // 제출 후 창 닫기
+            setShowPostBox(false);
         } catch (err) {
             console.error("트윗 등록 실패", err);
         }

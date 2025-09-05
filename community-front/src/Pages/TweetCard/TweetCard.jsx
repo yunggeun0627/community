@@ -17,6 +17,14 @@ function TweetCard(props) {
     const [pollVotes, setPollVotes] = useState(tweet.poll?.options?.map(() => 0) || []);
     const [votedIndex, setVotedIndex] = useState(null);
 
+    const imgSrc = tweet.imageUrl
+        ? tweet.imageUrl.startsWith("http")
+            ? tweet.imageUrl
+            : tweet.imageUrl.startsWith("/uploads/")
+                ? `http://localhost:8080${tweet.imageUrl}`
+                : `http://localhost:8080/uploads/${tweet.imageUrl}`
+        : null;
+
     // 투표 클릭 처리
     const handleVote = (idx) => {
         if (!tweet.poll) return; // poll이 없으면 무시
