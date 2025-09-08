@@ -8,6 +8,7 @@ import { AiOutlineBars } from "react-icons/ai";
 import EmojiPicker from 'emoji-picker-react';
 import api from '../../api/axios.js';
 import { reqPostTweet } from '../../api/tweetApi.js';
+import { requpload } from '../../api/upload.js';
 
 function TweetBox({ onTweet }) {
     const [content, setContent] = useState("");
@@ -21,27 +22,18 @@ function TweetBox({ onTweet }) {
         if (!content && !image && !pollOptions.some((opt) => opt)) return;
 
         const tweetData = {
-            userId: 1, // 로그인 전 임시
-            content: content,
-            imageUrl: image, // 정확히 DTO에 맞는 key
-            // poll은 서버에서 처리할 수 있다면 포함
+            userId: 1,
+            content,
+            imageUrl: image,
             poll: showPoll
-                ? {
-                    options: pollOptions.filter(opt => opt),
-                    endTime: null,
-                }
+                ? { options: pollOptions.filter((opt) => opt), endTime: null }
                 : null
         };
 
-        console.log("보낼 트윗 데이터:", tweetData); // 디버깅
-
         try {
             const response = await reqPostTweet(tweetData);
-            console.log("트윗 등록 성공:", response.data);
-
             if (onTweet) onTweet(response.data);
 
-            // 상태 초기화
             setContent("");
             setImage(null);
             setShowPoll(false);
@@ -61,10 +53,8 @@ function TweetBox({ onTweet }) {
         formData.append("file", file);
 
         try {
-            const res = await api.post("http://localhost:8080/api/upload", formData, {
-                headers: { "Content-Type": "multipart/form-data" },
-            });
-            setImage(res.data.url); // 서버가 준 URL만 저장
+            const res = await requpload(formData); // uploadApi 호출
+            setImage(res.data.url); // 서버가 준 URL 저장
         } catch (error) {
             console.error("이미지 업로드 실패:", error);
         }

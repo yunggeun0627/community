@@ -1,39 +1,49 @@
 /** @jsxImportSource @emotion/react */
 import EmojiPicker from 'emoji-picker-react';
 import * as s from './styles.js';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaHeart, FaRegComment, FaRegHeart, FaRetweet } from 'react-icons/fa';
 import { HiEllipsisVertical } from 'react-icons/hi2';
 
-function TweetCard(props) {
-    const { tweet = {}, onDelete } = props;
+function TweetCard({ tweet = {}, onDelete }) {
     const [liked, setLiked] = useState(false);
     const [retweet, setRetweet] = useState(false);
     const [comment, setComment] = useState("");
     const [showEmoji, setShowEmoji] = useState(false);
     const [comments, setComments] = useState([]);
-
-    // 투표 상태
     const [pollVotes, setPollVotes] = useState(tweet.poll?.options?.map(() => 0) || []);
     const [votedIndex, setVotedIndex] = useState(null);
 
+    // ✅ 업로드 경로 분기
     const imgSrc = tweet.imageUrl
         ? tweet.imageUrl.startsWith("http")
             ? tweet.imageUrl
-            : tweet.imageUrl.startsWith("/uploads/")
-                ? `http://localhost:8080${tweet.imageUrl}`
-                : `http://localhost:8080/uploads/${tweet.imageUrl}`
+            : `http://localhost:8080${tweet.imageUrl}`
         : null;
+    
+    useEffect(() => {
+        console.log("===== TweetCard 렌더링 =====");
+        console.log("tweet prop:", tweet);
+        console.log("tweet.imageUrl:", tweet?.imageUrl);
+        console.log("imgSrc:", imgSrc);
 
-    // 투표 클릭 처리
+        // 이미지 접근 테스트
+        if (imgSrc) {
+            const img = new Image();
+            img.src = imgSrc;
+            img.onload = () => console.log("✅ 이미지 로딩 성공:", imgSrc);
+            img.onerror = () => console.log("❌ 이미지 로딩 실패:", imgSrc);
+        }
+    }, [tweet, imgSrc]);
+
     const handleVote = (idx) => {
-        if (!tweet.poll) return; // poll이 없으면 무시
+        if (!tweet.poll) return;
+        if (votedIndex === idx) return;
+
         const updatedVotes = [...pollVotes];
-
-        if (votedIndex === idx) return; // 이미 선택한 항목이면 무시
         if (votedIndex !== null) updatedVotes[votedIndex] -= 1;
-
         updatedVotes[idx] += 1;
+
         setPollVotes(updatedVotes);
         setVotedIndex(idx);
     };
@@ -56,8 +66,6 @@ function TweetCard(props) {
                 <div css={s.user}>
                     작성자: {tweet.userId} · {tweet.createdAt && new Date(tweet.createdAt).toLocaleString()}
                 </div>
-                
-                {/* 🔥 삭제 버튼 추가 */}
                 {onDelete && (
                     <button onClick={() => onDelete(tweet.tweetId)} css={s.deleteButton}>
                         <HiEllipsisVertical size={20} />
@@ -67,13 +75,12 @@ function TweetCard(props) {
 
             <div css={s.content}>{tweet.content}</div>
 
-            {tweet.imageUrl && (
+            {imgSrc && (
                 <div css={s.imageWrapper}>
-                    <img src={tweet.imageUrl} alt="tweet" />
+                    <img src={imgSrc} alt="tweet" />
                 </div>
             )}
 
-            {/* 투표 UI */}
             {tweet.poll && (
                 <div css={s.pollBox}>
                     {tweet.poll.options.map((opt, idx) => {
@@ -81,11 +88,7 @@ function TweetCard(props) {
                         const percentage = totalVotes > 0 ? Math.round((pollVotes[idx] / totalVotes) * 100) : 0;
 
                         return (
-                            <div
-                                key={idx}
-                                css={s.pollOption(votedIndex === idx)}
-                                onClick={() => handleVote(idx)}
-                            >
+                            <div key={idx} css={s.pollOption(votedIndex === idx)} onClick={() => handleVote(idx)}>
                                 <span>{opt}</span>
                                 {totalVotes > 0 && <span>{percentage}% ({pollVotes[idx]})</span>}
                             </div>
@@ -99,7 +102,6 @@ function TweetCard(props) {
                 </div>
             )}
 
-            {/* 액션 버튼 */}
             <div css={s.actions}>
                 <div><FaRegComment /></div>
                 <div onClick={() => setLiked(!liked)}>
@@ -112,7 +114,6 @@ function TweetCard(props) {
                 </div>
             </div>
 
-            {/* 댓글 + 이모지 */}
             <div css={s.commentBox}>
                 <textarea
                     css={s.commentInput}
@@ -121,11 +122,7 @@ function TweetCard(props) {
                     onChange={(e) => setComment(e.target.value)}
                 />
                 <button css={s.iconButton} onClick={() => setShowEmoji(!showEmoji)}>😀</button>
-                {showEmoji && (
-                    <div css={s.emojiPopup}>
-                        <EmojiPicker onEmojiClick={handleEmojiSelect} />
-                    </div>
-                )}
+                {showEmoji && <div css={s.emojiPopup}><EmojiPicker onEmojiClick={handleEmojiSelect} /></div>}
                 <button css={s.commentButton} onClick={handleAddComment}>댓글</button>
             </div>
 
