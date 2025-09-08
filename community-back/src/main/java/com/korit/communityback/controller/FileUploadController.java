@@ -19,11 +19,23 @@ import java.util.UUID;
 @RequestMapping("/api")
 public class FileUploadController {
 
-    @PostMapping("/upload")
-    public ResponseEntity<Map<String, String>> uploadImage(@RequestParam("file") MultipartFile file) {
+    // 🔹 프로필 업로드
+    @PostMapping("/upload/profile")
+    public ResponseEntity<Map<String, String>> uploadProfile(@RequestParam("file") MultipartFile file) {
+        return handleFileUpload(file, "profile");
+    }
+
+    // 🔹 트윗 업로드
+    @PostMapping("/upload/tweet")
+    public ResponseEntity<Map<String, String>> uploadTweet(@RequestParam("file") MultipartFile file) {
+        return handleFileUpload(file, "tweet");
+    }
+
+    // 🔹 공통 업로드 처리 메서드
+    private ResponseEntity<Map<String, String>> handleFileUpload(MultipartFile file, String type) {
         try {
-            // 업로드 경로 (프로젝트 루트 기준)
-            String uploadDir = "uploads/";
+            // 업로드 경로 (예: upload/profile, upload/tweet)
+            String uploadDir = "upload/" + type + "/";
 
             // 파일명 충돌 방지
             String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
@@ -35,10 +47,11 @@ public class FileUploadController {
             // 파일 저장
             Files.write(path, file.getBytes());
 
-            // 클라이언트가 접근 가능한 URL
-            String fileUrl = "/uploads/" + fileName;
+            // 클라이언트 접근 가능한 URL
+            String fileUrl = "/upload/" + type + "/" + fileName;
 
             return ResponseEntity.ok(Map.of("url", fileUrl));
+
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", "파일 업로드 실패"));
