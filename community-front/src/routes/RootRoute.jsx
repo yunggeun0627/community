@@ -15,12 +15,11 @@ import Premium from '../Pages/Premium/Premium';
 import Profile from '../Pages/Profile/Profile';
 import More from '../Pages/More/More';
 
-
-function RootRoute(props) {
+function RootRoute({ userProfile, onProfileChange }) {
     const location = useLocation();
     const navigate = useNavigate();
-    const pathname = location.pathname;
     const principalQuery = usePrincipalQuery();
+    const pathname = location.pathname;
 
     useEffect(() => {
         if (principalQuery.isFetched && principalQuery.isError && !pathname.startsWith("/auth")) {
@@ -38,7 +37,7 @@ function RootRoute(props) {
         return (
             <MainLayout>
                 <Routes>
-                    <Route path="/" element={ <Home /> } />
+                    <Route path="/" element={<Home userProfile={userProfile} />} />
                     <Route path="/twitter/exlore" element={ <Explore /> } />
                     <Route path="/notifications" element={<Notification /> } />
                     <Route path="/messages" element={ <Message /> } />
@@ -46,7 +45,7 @@ function RootRoute(props) {
                     <Route path="/jobs" element={ <Job /> } />
                     <Route path="/communities" element={<Communites /> } />
                     <Route path="/premium" element={ <Premium /> } />
-                    <Route path="/profile" element={ <Profile /> } />
+                    <Route path="/profile" element={<Profile userProfile={userProfile} onProfileChange={onProfileChange} />} />
                     <Route path="/more" element={ <More /> } />
                 </Routes>
             </MainLayout>

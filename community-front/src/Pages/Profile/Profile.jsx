@@ -4,7 +4,9 @@ import * as s from './styles.js';
 import { CgProfile } from 'react-icons/cg';
 
 function Profile(props) {
-    const [avatarSrc, setAvatarSrc] = useState(""); // 초기 이미지 없음
+    const [avatarSrc, setAvatarSrc] = useState("");
+    const [username, setUsername] = useState("");
+    const [displayName, setDisplayName] = useState("");
     const inputRef = useRef(null);
     const [activeTab, setActiveTab] = useState("Tweets");
 
@@ -14,10 +16,11 @@ function Profile(props) {
         { id: 3, content: "Emotion CSS is cool!" },
     ];
 
-    // 페이지 로드 시 localStorage에서 이미지 불러오기
+    // 페이지 로드 시 localStorage에서 프로필 불러오기
     useEffect(() => {
-        const savedAvatar = localStorage.getItem("profileAvatar");
-        if (savedAvatar) setAvatarSrc(savedAvatar);
+        setAvatarSrc(localStorage.getItem("profileAvatar") || "");
+        setUsername(localStorage.getItem("profileUsername") || "johndoe");
+        setDisplayName(localStorage.getItem("profileDisplayName") || "John Doe");
     }, []);
 
     // 아바타 클릭 -> 파일 선택
@@ -32,20 +35,14 @@ function Profile(props) {
             const reader = new FileReader();
             reader.onload = (e) => {
                 setAvatarSrc(e.target.result);
-                localStorage.setItem("profileAvatar", e.target.result); // 저장
+                localStorage.setItem("profileAvatar", e.target.result);
             };
             reader.readAsDataURL(file);
         }
     };
 
-    // 탭/트윗 클릭
-    const handleClick = (type) => {
-        if (props.onAction) props.onAction(type);
-    };
-
     return (
         <div css={s.layout}>
-            {/* 헤더 */}
             <div css={s.header}></div>
 
             {/* 아바타 */}
@@ -66,8 +63,8 @@ function Profile(props) {
 
             {/* 사용자 정보 */}
             <div css={s.info}>
-                <div css={s.username}>John Doe</div>
-                <div css={s.handle}>@johndoe</div>
+                <div css={s.username}>@{username}</div>
+                <div css={s.displayName}>{displayName}</div>
 
                 <div css={s.stats}>
                     <span>
@@ -83,10 +80,7 @@ function Profile(props) {
                         <div
                             key={tab}
                             className={activeTab === tab ? "active" : ""}
-                            onClick={() => {
-                                setActiveTab(tab);
-                                handleClick(tab);
-                            }}
+                            onClick={() => setActiveTab(tab)}
                         >
                             {tab}
                         </div>
@@ -96,11 +90,7 @@ function Profile(props) {
 
             {/* 트윗 리스트 */}
             {tweets.map((t) => (
-                <div
-                    key={t.id}
-                    css={s.tweetItem}
-                    onClick={() => handleClick("tweet")}
-                >
+                <div key={t.id} css={s.tweetItem}>
                     {t.content}
                 </div>
             ))}

@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { FaHeart, FaRegComment, FaRegHeart, FaRetweet } from 'react-icons/fa';
 import { HiEllipsisVertical } from 'react-icons/hi2';
 
-function TweetCard({ tweet = {}, onDelete }) {
+function TweetCard({ tweet = {}, onDelete, userProfile }) {
     const [liked, setLiked] = useState(false);
     const [retweet, setRetweet] = useState(false);
     const [comment, setComment] = useState("");
@@ -13,28 +13,33 @@ function TweetCard({ tweet = {}, onDelete }) {
     const [comments, setComments] = useState([]);
     const [pollVotes, setPollVotes] = useState(tweet.poll?.options?.map(() => 0) || []);
     const [votedIndex, setVotedIndex] = useState(null);
+    const [elapsedTime, setElapsedTime] = useState(0);
 
-    // ✅ 업로드 경로 분기
+    // 경과 시간을 포맷하는 함수
+    const formatElapsedTime = (seconds) => {
+        if (seconds < 60) return `${seconds}초`;
+        if (seconds < 3600) return `${Math.floor(seconds / 60)}분`;
+        if (seconds < 86400) return `${Math.floor(seconds / 3600)}시간`;
+        if (seconds < 2592000) return `${Math.floor(seconds / 86400)}일`;
+        if (seconds < 31536000) return `${Math.floor(seconds / 2592000)}월`;
+        return `${Math.floor(seconds / 31536000)}년`;
+    };
+
+    // 게시 후 경과 시간을 계산
+    useEffect(() => {
+        const start = new Date(tweet.createdAt).getTime() || Date.now();
+        const interval = setInterval(() => {
+            const now = Date.now();
+            setElapsedTime(Math.floor((now - start) / 1000));
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [tweet.createdAt]);
+
     const imgSrc = tweet.imageUrl
         ? tweet.imageUrl.startsWith("http")
             ? tweet.imageUrl
-            : `http://localhost:8080${tweet.imageUrl}`
+            : `http://localhost:8080${tweet.imageUrl.replace(/^\/+/, "/")}`
         : null;
-    
-    useEffect(() => {
-        console.log("===== TweetCard 렌더링 =====");
-        console.log("tweet prop:", tweet);
-        console.log("tweet.imageUrl:", tweet?.imageUrl);
-        console.log("imgSrc:", imgSrc);
-
-        // 이미지 접근 테스트
-        if (imgSrc) {
-            const img = new Image();
-            img.src = imgSrc;
-            img.onload = () => console.log("✅ 이미지 로딩 성공:", imgSrc);
-            img.onerror = () => console.log("❌ 이미지 로딩 실패:", imgSrc);
-        }
-    }, [tweet, imgSrc]);
 
     const handleVote = (idx) => {
         if (!tweet.poll) return;
@@ -64,8 +69,15 @@ function TweetCard({ tweet = {}, onDelete }) {
         <div css={s.card}>
             <div css={s.header}>
                 <div css={s.user}>
-                    작성자: {tweet.userId} · {tweet.createdAt && new Date(tweet.createdAt).toLocaleString()}
+                    {userProfile && (
+                        <>
+                            <img src={userProfile.avatar} alt="" css={s.avatar} />
+                            <span css={s.username}>@{userProfile.username}</span>
+                        </>
+                    )}
+                    · <span css={s.elapsedTime}>{formatElapsedTime(elapsedTime)}</span>
                 </div>
+
                 {onDelete && (
                     <button onClick={() => onDelete(tweet.tweetId)} css={s.deleteButton}>
                         <HiEllipsisVertical size={20} />

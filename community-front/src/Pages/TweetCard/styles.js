@@ -44,6 +44,23 @@ export const user = css`
     color: #0f1419;
 `;
 
+export const avatar = css`
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+`;
+
+export const username = css`
+    font-weight: bold;
+    color: #555;
+`;
+
+export const elapsedTime = css`
+    color: #888;
+    font-size: 12px;
+    margin-left: 4px;
+`;
+
 export const content = css`
     font-size: 15px;
     color: #0f1419;

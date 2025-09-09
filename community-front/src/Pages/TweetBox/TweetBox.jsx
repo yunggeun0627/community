@@ -17,23 +17,26 @@ function TweetBox({ onTweet }) {
     const [showPoll, setShowPoll] = useState(false);
     const [pollOptions, setPollOptions] = useState(["", ""]);
 
-    // 트윗 제출
+    // URL 정규화
+    const normalizePath = (url) => {
+        if (!url) return null;
+        return url.startsWith("http") ? url : `http://localhost:8080${url}`;
+    };
+
     const handleSubmit = async () => {
         if (!content && !image && !pollOptions.some((opt) => opt)) return;
+
+        const imagePath = image?.replace("http://localhost:8080", "");
 
         const tweetData = {
             userId: 1,
             content,
-            imageUrl: image,
-            poll: showPoll
-                ? { options: pollOptions.filter((opt) => opt), endTime: null }
-                : null
+            imageUrl: imagePath,
+            poll: showPoll ? { options: pollOptions.filter((opt) => opt), endTime: null } : null,
         };
 
         try {
-            const response = await reqPostTweet(tweetData);
-            if (onTweet) onTweet(response.data);
-
+            if (onTweet) await onTweet(tweetData); // 부모 state에 바로 반영
             setContent("");
             setImage(null);
             setShowPoll(false);
@@ -44,7 +47,6 @@ function TweetBox({ onTweet }) {
         }
     };
 
-    // 이미지 업로드
     const handleImageChange = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -53,14 +55,13 @@ function TweetBox({ onTweet }) {
         formData.append("file", file);
 
         try {
-            const res = await requpload(formData); // uploadApi 호출
-            setImage(res.data.url); // 서버가 준 URL 저장
+            const res = await requpload(formData); // { url: "/upload/xxx.jpg" }
+            setImage(normalizePath(res.data.url));
         } catch (error) {
             console.error("이미지 업로드 실패:", error);
         }
     };
 
-    // 이모지 선택
     const handleEmojiSelect = (emojiData) => {
         setContent((prev) => prev + emojiData.emoji);
         setShowEmoji(false);
