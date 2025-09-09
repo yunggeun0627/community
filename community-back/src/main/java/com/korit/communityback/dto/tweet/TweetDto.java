@@ -27,9 +27,9 @@ public class TweetDto {
                 .imageUrl(tweet.getImageUrl() != null
                         ? (tweet.getImageUrl().startsWith("http")
                         ? tweet.getImageUrl()
-                        : tweet.getImageUrl().startsWith("/uploads/")
+                        : tweet.getImageUrl().startsWith("/upload/")
                         ? "http://localhost:8080" + tweet.getImageUrl()
-                        : "http://localhost:8080/uploads/" + tweet.getImageUrl())
+                        : "http://localhost:8080/upload/" + tweet.getImageUrl())
                         : null)
                 .createdAt(tweet.getCreatedAt())
                 .build();

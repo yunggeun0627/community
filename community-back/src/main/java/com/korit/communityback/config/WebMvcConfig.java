@@ -19,10 +19,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        final String uploadPath = rootPath + "/upload";
-        System.out.println(uploadPath);
+        // 실행 경로 + /upload
+        String uploadPath = rootPath + "/upload/";
+
+        System.out.println("📂 UploadPath = " + uploadPath);
+
         registry.addResourceHandler("/upload/**")
-                .addResourceLocations("file:///" + uploadPath)
+                .addResourceLocations("file:" + uploadPath)
                 .resourceChain(true)
                 .addResolver(new PathResourceResolver() {
                     @Override
@@ -31,6 +34,5 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         return super.getResource(resourcePath, location);
                     }
                 });
-        WebMvcConfigurer.super.addResourceHandlers(registry);
     }
 }
