@@ -15,6 +15,23 @@ function TweetCard({ tweet = {}, onDelete, userProfile }) {
     const [votedIndex, setVotedIndex] = useState(null);
     const [elapsedTime, setElapsedTime] = useState(0);
 
+    // 🟢 프로필 상태 (localStorage 연동)
+    const [profile, setProfile] = useState(userProfile);
+
+    useEffect(() => {
+        const handleStorageChange = (e) => {
+            if (e.key === "profileAvatar" || e.key === "profileUsername") {
+                setProfile({
+                    avatar: localStorage.getItem("profileAvatar") || profile?.avatar,
+                    username: localStorage.getItem("profileUsername") || profile?.username,
+                });
+            }
+        };
+
+        window.addEventListener("storage", handleStorageChange);
+        return () => window.removeEventListener("storage", handleStorageChange);
+    }, [profile]);
+
     // 경과 시간을 포맷하는 함수
     const formatElapsedTime = (seconds) => {
         if (seconds < 60) return `${seconds}초`;

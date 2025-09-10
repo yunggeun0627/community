@@ -39,6 +39,10 @@ export const deleteButton = css`
 `;
 
 export const user = css`
+    display: flex;
+    flex-direction: row;
+    align-items: center; 
+    gap: 3px; 
     font-weight: 600;
     font-size: 15px;
     color: #0f1419;

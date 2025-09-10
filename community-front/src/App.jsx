@@ -5,12 +5,15 @@ import RootLayout from './components/Layout/RootLayout/RootLayout';
 function App(props) {
     const [userProfile, setUserProfile] = useState({
         avatar: localStorage.getItem("profileAvatar") || "",
-        username: localStorage.getItem("profileUsername") || "johndoe",
+        banner: localStorage.getItem("profileBanner") || "",
+        username: localStorage.getItem("profileUsername") || "username",
     });
 
     const handleProfileChange = (newProfile) => {
         setUserProfile((prev) => ({ ...prev, ...newProfile }));
+
         if (newProfile.avatar) localStorage.setItem("profileAvatar", newProfile.avatar);
+        if (newProfile.banner) localStorage.setItem("profileBanner", newProfile.banner);
         if (newProfile.username) localStorage.setItem("profileUsername", newProfile.username);
     };
 

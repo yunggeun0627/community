@@ -14,18 +14,22 @@ import { HiOutlineUsers, HiUser, HiUsers } from 'react-icons/hi2';
 import { BsTwitterX } from 'react-icons/bs';
 import { FiMoreHorizontal } from "react-icons/fi";
 
-function LeftSideBarLayout(props) {
+function LeftSideBarLayout({ userProfile }) {
     const navigate = useNavigate();
     const [showMenu, setShowMenu] = useState(false);
     const pathname = useLocation().pathname;
-    const [avatar, setAvatar] = useState("");
+    const [profile, setProfile] = useState({
+        avatar: localStorage.getItem("profileAvatar") || "/default-avatar.png",
+        username: localStorage.getItem("profileUsername") || "username",
+        displayName: localStorage.getItem("profileDisplayName") || "사용자 이름"
+    });
     const [showPostBox, setShowPostBox] = useState(false);
 
     const MENUS = [
         {
             id: 1,
             path: "/",
-            name: "Home",
+            name: "홈",
             icon: {
                 off: <GoHome />,
                 on: <GoHomeFill />,
@@ -34,7 +38,7 @@ function LeftSideBarLayout(props) {
         {
             id: 2,
             path: "/twitter/exlore",
-            name: "Explore",
+            name: "검색",
             icon: {
                 off: <IoSearchOutline />,
                 on: <IoSearchSharp />,
@@ -43,7 +47,7 @@ function LeftSideBarLayout(props) {
         {
             id: 3,
             path: "/notifications",
-            name: "Notifications",
+            name: "알림",
             icon: {
                 off: <GoBell />,
                 on: <GoBellFill />,
@@ -52,7 +56,7 @@ function LeftSideBarLayout(props) {
         {
             id: 4,
             path: "/messages",
-            name: "Message",
+            name: "메세지",
             icon: {
                 off: <FaRegEnvelope />,
                 on: <FaEnvelope />,
@@ -61,7 +65,7 @@ function LeftSideBarLayout(props) {
         {
             id: 5,
             path: "/bookmarks",
-            name: "Bookmarks",
+            name: "북마크",
             icon: {
                 off: <IoBookmarkOutline />,
                 on: <IoBookmark />,
@@ -70,7 +74,7 @@ function LeftSideBarLayout(props) {
         {
             id: 6,
             path: "/jobs",
-            name: "Jobs",
+            name: "채용",
             icon: {
                 off: <LuBriefcaseBusiness />,
                 on: <LuBriefcaseBusiness />,
@@ -79,7 +83,7 @@ function LeftSideBarLayout(props) {
         {
             id: 7,
             path: "/communities",
-            name: "Communities",
+            name: "커뮤니티",
             icon: {
                 off: <HiOutlineUsers />,
                 on: <HiUsers />,
@@ -88,7 +92,7 @@ function LeftSideBarLayout(props) {
         {
             id: 8,
             path: "/premium",
-            name: "Premium",
+            name: "프리미엄",
             icon: {
                 off: <BsTwitterX />,
                 on: <BsTwitterX />,
@@ -97,7 +101,7 @@ function LeftSideBarLayout(props) {
         {
             id: 9,
             path: "/profile",
-            name: "Profile",
+            name: "프로필",
             icon: {
                 off: <LuUserRound />,
                 on: <HiUser />,
@@ -106,7 +110,7 @@ function LeftSideBarLayout(props) {
         {
             id: 10,
             path: "/more",
-            name: "More",
+            name: "더보기",
             icon: {
                 off: <CiCircleMore />,
                 on: <CgMoreO />,
@@ -114,37 +118,32 @@ function LeftSideBarLayout(props) {
         },
     ];
 
-    // 페이지 로드 시 localStorage에서 이미지 불러오기
+    const loadProfile = () => {
+        const avatar = localStorage.getItem("profileAvatar") || "";
+        const username = localStorage.getItem("profileUsername") || "username";
+        const displayName = localStorage.getItem("profileDisplayName") || "사용자 이름";
+        setProfile({ avatar, username, displayName });
+    };
+
     useEffect(() => {
-        const savedAvatar = localStorage.getItem("sidebarAvatar");
-        if (savedAvatar) setAvatar(savedAvatar);
+        loadProfile(); // 첫 로드 시 불러오기
+
+        // 다른 탭/컴포넌트에서 변경 시 반영
+        const handleStorageChange = (e) => {
+            if (["profileAvatar", "profileUsername", "profileDisplayName"].includes(e.key)) {
+                loadProfile();
+            }
+        };
+        window.addEventListener("storage", handleStorageChange);
+        return () => window.removeEventListener("storage", handleStorageChange);
     }, []);
 
-    // 기존 handleAvatarChange 수정 (localStorage 저장 추가)
-    const handleAvatarChange = (e) => {
-        const file = e.target.files && e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                if (reader.result) {
-                    const resultStr = reader.result.toString();
-                    setAvatar(resultStr);
-                    localStorage.setItem("sidebarAvatar", resultStr); // 저장
-                }
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
-    const toggleMenu = () => {
-        setShowMenu(!showMenu);
-    };
+    const toggleMenu = () => setShowMenu(!showMenu);
 
     const handleLogout = (e) => {
-        e.stopPropagation(); // 이벤트 버블 방지
+        e.stopPropagation();
         try {
             localStorage.removeItem("AccessToken");
-            setIsLoggedIn(false);
             navigate("/auth/login");
         } catch (error) {
             console.error("로그아웃 중 오류 발생:", error);
@@ -152,10 +151,7 @@ function LeftSideBarLayout(props) {
         }
     };
 
-    const handlePostButtonClick = () => {
-        setShowPostBox(!showPostBox); // 토글
-    };
-
+    const handlePostButtonClick = () => setShowPostBox(!showPostBox);
 
     return (
         <div css={s.layout}>
@@ -163,7 +159,6 @@ function LeftSideBarLayout(props) {
 
             <nav>
                 {MENUS.map((menu) => (
-
                     <Link to={menu.path} key={menu.id} css={s.menu}>
                         {pathname === menu.path ? menu.icon.on : menu.icon.off}
                         <span>{menu.name}</span>
@@ -171,32 +166,23 @@ function LeftSideBarLayout(props) {
                 ))}
             </nav>
 
-            <button css={s.postButton}>
+            <button css={s.postButton} onClick={handlePostButtonClick}>
                 <FaPenSquare size={20} />
                 <span>Post</span>
             </button>
 
             <div css={s.profileBox}>
-                <label htmlFor="avatarUpload">
-                    <img
-                        css={s.profileImage}
-                        src={avatar || "/default-avatar.png"}
-                        alt="avatar"
-                    />
-                </label>
-
-                <input
-                    id="avatarUpload"
-                    type="file"
-                    accept="image/*"
-                    style={{ display: "none" }}
-                    onChange={handleAvatarChange}
+                <img
+                    css={s.profileImage}
+                    src={profile.avatar || "/default-avatar.png"}
+                    alt="avatar"
                 />
 
                 <div css={s.profileInfo}>
-                    <div css={s.profileName}>사용자 이름</div>
-                    <div css={s.profileId}>@username</div>
+                    <div css={s.profileName}>{profile.displayName}</div>
+                    <div css={s.profileId}>@{profile.username}</div>
                 </div>
+
                 <div css={s.profileMore} onClick={toggleMenu}>
                     <FiMoreHorizontal />
 
