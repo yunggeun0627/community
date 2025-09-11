@@ -18,11 +18,6 @@ function LeftSideBarLayout({ userProfile }) {
     const navigate = useNavigate();
     const [showMenu, setShowMenu] = useState(false);
     const pathname = useLocation().pathname;
-    const [profile, setProfile] = useState({
-        avatar: localStorage.getItem("profileAvatar") || "/default-avatar.png",
-        username: localStorage.getItem("profileUsername") || "username",
-        displayName: localStorage.getItem("profileDisplayName") || "사용자 이름"
-    });
     const [showPostBox, setShowPostBox] = useState(false);
 
     const MENUS = [
@@ -118,26 +113,6 @@ function LeftSideBarLayout({ userProfile }) {
         },
     ];
 
-    const loadProfile = () => {
-        const avatar = localStorage.getItem("profileAvatar") || "";
-        const username = localStorage.getItem("profileUsername") || "username";
-        const displayName = localStorage.getItem("profileDisplayName") || "사용자 이름";
-        setProfile({ avatar, username, displayName });
-    };
-
-    useEffect(() => {
-        loadProfile(); // 첫 로드 시 불러오기
-
-        // 다른 탭/컴포넌트에서 변경 시 반영
-        const handleStorageChange = (e) => {
-            if (["profileAvatar", "profileUsername", "profileDisplayName"].includes(e.key)) {
-                loadProfile();
-            }
-        };
-        window.addEventListener("storage", handleStorageChange);
-        return () => window.removeEventListener("storage", handleStorageChange);
-    }, []);
-
     const toggleMenu = () => setShowMenu(!showMenu);
 
     const handleLogout = (e) => {
@@ -152,6 +127,7 @@ function LeftSideBarLayout({ userProfile }) {
     };
 
     const handlePostButtonClick = () => setShowPostBox(!showPostBox);
+
 
     return (
         <div css={s.layout}>
@@ -174,13 +150,13 @@ function LeftSideBarLayout({ userProfile }) {
             <div css={s.profileBox}>
                 <img
                     css={s.profileImage}
-                    src={profile.avatar || "/default-avatar.png"}
+                    src={userProfile.avatar || "/default-avatar.png"}
                     alt="avatar"
                 />
 
                 <div css={s.profileInfo}>
-                    <div css={s.profileName}>{profile.displayName}</div>
-                    <div css={s.profileId}>@{profile.username}</div>
+                    <div css={s.profileName}>{userProfile.displayName || "사용자 이름"}</div>
+                    <div css={s.profileId}>@{userProfile.username || "username"}</div>
                 </div>
 
                 <div css={s.profileMore} onClick={toggleMenu}>

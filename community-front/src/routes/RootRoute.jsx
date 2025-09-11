@@ -35,18 +35,26 @@ function RootRoute({ userProfile, onProfileChange }) {
 
     if (principalQuery.isFetched && principalQuery.isSuccess) {
         return (
-            <MainLayout>
+            <MainLayout userProfile={userProfile} onProfileChange={onProfileChange}>
                 <Routes>
                     <Route path="/" element={<Home userProfile={userProfile} />} />
-                    <Route path="/twitter/exlore" element={ <Explore /> } />
-                    <Route path="/notifications" element={<Notification /> } />
-                    <Route path="/messages" element={ <Message /> } />
-                    <Route path="/bookmarks" element={ <BookMark /> } />
-                    <Route path="/jobs" element={ <Job /> } />
-                    <Route path="/communities" element={<Communites /> } />
-                    <Route path="/premium" element={ <Premium /> } />
-                    <Route path="/profile" element={<Profile userProfile={userProfile} onProfileChange={onProfileChange} />} />
-                    <Route path="/more" element={ <More /> } />
+                    <Route path="/twitter/exlore" element={<Explore />} />
+                    <Route path="/notifications" element={<Notification />} />
+                    <Route path="/messages" element={<Message />} />
+                    <Route path="/bookmarks" element={<BookMark />} />
+                    <Route path="/jobs" element={<Job />} />
+                    <Route path="/communities" element={<Communites />} />
+                    <Route path="/premium" element={<Premium />} />
+                    <Route
+                        path="/profile"
+                        element={
+                            <Profile
+                                userProfile={userProfile}
+                                onProfileChange={onProfileChange}
+                            />
+                        }
+                    />
+                    <Route path="/more" element={<More />} />
                 </Routes>
             </MainLayout>
         );

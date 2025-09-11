@@ -65,7 +65,6 @@ function Profile({ userProfile, onProfileChange }) {
         }
     };
 
-
     // 수정 버튼 클릭 → 모달 열 때 입력값 초기화
     const handleEditProfile = () => {
         setEditNickname(""); // 빈칸으로 시작
@@ -80,9 +79,9 @@ function Profile({ userProfile, onProfileChange }) {
         const newNickname = editNickname || nickname;
         setNickname(newNickname);
 
-        props.onProfileChange({
+        onProfileChange?.({
             avatar: avatarSrc,
-            displayName: newNickname
+            displayName: newNickname,
         });
 
         localStorage.setItem("profileNickname", newNickname);
@@ -98,17 +97,7 @@ function Profile({ userProfile, onProfileChange }) {
                     type="file"
                     accept="image/*"
                     ref={bannerInputRef}
-                    onChange={(e) => {
-                        const file = e.target.files[0];
-                        if (file) {
-                            const reader = new FileReader();
-                            reader.onload = () => {
-                                setBannerSrc(reader.result);
-                                localStorage.setItem("profileBanner", reader.result);
-                            };
-                            reader.readAsDataURL(file);
-                        }
-                    }}
+                    onChange={handleBannerChange}
                     css={s.avatarInput}
                 />
             </div>
@@ -116,10 +105,22 @@ function Profile({ userProfile, onProfileChange }) {
             {/* 아바타 + 수정 버튼 */}
             <div css={s.avatarRow}>
                 <div css={s.avatarWrapper} onClick={handleClickAvatar}>
-                    {avatarSrc ? <img src={avatarSrc} alt="avatar" css={s.avatar} /> : <CgProfile css={s.avatarIcon} />}
-                    <input type="file" accept="image/*" ref={inputRef} onChange={handleAvatarChange} css={s.avatarInput} />
+                    {avatarSrc ? (
+                        <img src={avatarSrc} alt="avatar" css={s.avatar} />
+                    ) : (
+                        <CgProfile css={s.avatarIcon} />
+                    )}
+                    <input
+                        type="file"
+                        accept="image/*"
+                        ref={inputRef}
+                        onChange={handleAvatarChange}
+                        css={s.avatarInput}
+                    />
                 </div>
-                <button css={s.editButton} onClick={handleEditProfile}>프로필 수정</button>
+                <button css={s.editButton} onClick={handleEditProfile}>
+                    프로필 수정
+                </button>
             </div>
 
             {/* 사용자 정보 */}
@@ -134,23 +135,37 @@ function Profile({ userProfile, onProfileChange }) {
                 </div>
 
                 <div css={s.tabs}>
-                    {["Tweets", "Replies", "Media", "Likes"].map(tab => (
-                        <div key={tab} className={activeTab === tab ? "active" : ""} onClick={() => setActiveTab(tab)}>{tab}</div>
+                    {["Tweets", "Replies", "Media", "Likes"].map((tab) => (
+                        <div
+                            key={tab}
+                            className={activeTab === tab ? "active" : ""}
+                            onClick={() => setActiveTab(tab)}
+                        >
+                            {tab}
+                        </div>
                     ))}
                 </div>
             </div>
 
             {/* 트윗 리스트 */}
-            {tweets.map(t => <div key={t.id} css={s.tweetItem}>{t.content}</div>)}
+            {tweets.map((t) => (
+                <div key={t.id} css={s.tweetItem}>
+                    {t.content}
+                </div>
+            ))}
 
             {/* 프로필 수정 모달 */}
             {isEditOpen && (
                 <div css={s.modalOverlay}>
                     <div css={s.modalContent}>
                         <div css={s.modalHeader}>
-                            <button css={s.closeButton} onClick={() => setIsEditOpen(false)}>X</button>
+                            <button css={s.closeButton} onClick={() => setIsEditOpen(false)}>
+                                X
+                            </button>
                             <h2 css={s.modalTitle}>프로필 수정</h2>
-                            <button css={s.saveButton} onClick={handleSaveProfile}>저장</button>
+                            <button css={s.saveButton} onClick={handleSaveProfile}>
+                                저장
+                            </button>
                         </div>
 
                         {/* 배너 */}
@@ -174,13 +189,18 @@ function Profile({ userProfile, onProfileChange }) {
 
                         {/* 모달 안 프로필 이미지 */}
                         <div css={s.inputWrapper}>
-                            <div css={s.avatarWrapper} onClick={() => avatarInputRef.current.click()}>
+                            <div
+                                css={s.avatarWrapper}
+                                onClick={() => avatarInputRef.current.click()}
+                            >
                                 {avatarSrc ? (
                                     <img src={avatarSrc} alt="avatar" css={s.avatar} />
                                 ) : (
                                     <CgProfile css={s.avatarIcon} />
                                 )}
-                                <div css={s.cameraIcon}><TbCameraPlus size={24} color="#fff" /></div>
+                                <div css={s.cameraIcon}>
+                                    <TbCameraPlus size={24} color="#fff" />
+                                </div>
                                 <input
                                     type="file"
                                     accept="image/*"
@@ -191,7 +211,10 @@ function Profile({ userProfile, onProfileChange }) {
                                             const reader = new FileReader();
                                             reader.onload = () => {
                                                 setAvatarSrc(reader.result);
-                                                localStorage.setItem("profileAvatar", reader.result);
+                                                localStorage.setItem(
+                                                    "profileAvatar",
+                                                    reader.result
+                                                );
                                             };
                                             reader.readAsDataURL(file);
                                         }
@@ -203,15 +226,18 @@ function Profile({ userProfile, onProfileChange }) {
 
                         {/* 이름 */}
                         <div css={s.inputWrapper}>
-                            <label css={s.label(isFocusedNickname || editNickname)} htmlFor="nickname">
+                            <label
+                                css={s.label(isFocusedNickname || editNickname)}
+                                htmlFor="nickname"
+                            >
                                 이름
                             </label>
                             <input
                                 id="nickname"
                                 type="text"
                                 maxLength={30}
-                                value={editNickname}       // value는 빈칸("")에서 시작
-                                placeholder=""    // placeholder로 기존 값 표시
+                                value={editNickname}
+                                placeholder=""
                                 onChange={(e) => setEditNickname(e.target.value)}
                                 onFocus={() => setIsFocusedNickname(true)}
                                 onBlur={() => setIsFocusedNickname(false)}
@@ -224,15 +250,18 @@ function Profile({ userProfile, onProfileChange }) {
 
                         {/* 자기소개 */}
                         <div css={s.inputWrapper}>
-                            <label css={s.label(isFocusedBio || editBio)} htmlFor="bio">
+                            <label
+                                css={s.label(isFocusedBio || editBio)}
+                                htmlFor="bio"
+                            >
                                 자기소개
                             </label>
                             <input
                                 id="bio"
                                 type="text"
                                 maxLength={50}
-                                value={editBio}           // value는 빈칸("")에서 시작
-                                placeholder=""        // placeholder로 기존 값 표시
+                                value={editBio}
+                                placeholder=""
                                 onChange={(e) => setEditBio(e.target.value)}
                                 onFocus={() => setIsFocusedBio(true)}
                                 onBlur={() => setIsFocusedBio(false)}

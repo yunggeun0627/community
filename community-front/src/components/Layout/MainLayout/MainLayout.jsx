@@ -4,8 +4,9 @@ import * as s from './styles.js';
 import LeftSideBarLayout from '../LeftSidebarLayout/LeftSidebarLayout.jsx';
 import RightSideBarLayout from '../RightSidebarLayout/RightSidebarLayout.jsx';
 
-function MainLayout({ children }) {
+function MainLayout({ children, userProfile, onProfileChange }) {
     const [showPostBox, setShowPostBox] = useState(false);
+
     // window 스크롤 함수
     const scrollToNewContent = useCallback(() => {
         window.scrollTo({
@@ -16,7 +17,12 @@ function MainLayout({ children }) {
 
     return (
         <div css={s.layout}>
-            <LeftSideBarLayout setShowPostBox={setShowPostBox} />
+            <LeftSideBarLayout
+                userProfile={userProfile}
+                onProfileChange={onProfileChange}
+                setShowPostBox={setShowPostBox}
+            />
+
             <div css={s.container}>
                 {React.isValidElement(children) &&
                     React.cloneElement(children, {
