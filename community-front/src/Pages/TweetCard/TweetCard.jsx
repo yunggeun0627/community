@@ -8,24 +8,30 @@ import { CiImageOn } from 'react-icons/ci';
 import { AiOutlineBars } from 'react-icons/ai';
 import { RiEmotionHappyLine } from 'react-icons/ri';
 import { BiBarChart } from "react-icons/bi";
-
+import { useNavigate } from 'react-router-dom';
 
 function TweetCard({ tweet = {}, onDelete, userProfile }) {
+    const navigate = useNavigate();
     const [liked, setLiked] = useState(false);
     const [retweet, setRetweet] = useState(false);
     const [comment, setComment] = useState("");
-    const [comments, setComments] = useState([]);
+    const [comments, setComments] = useState(() => {
+        const saved = localStorage.getItem(`comments_${tweet.tweetId}`);
+        return saved ? JSON.parse(saved) : [];
+    });
     const [pollVotes, setPollVotes] = useState(tweet.poll?.options?.map(() => 0) || []);
     const [votedIndex, setVotedIndex] = useState(null);
     const [elapsedTime, setElapsedTime] = useState(0);
-    const [showComments, setShowComments] = useState(false);
     const [showReplyModal, setShowReplyModal] = useState(false);
-
-    // 조회수 상태
     const [views, setViews] = useState(tweet.views ?? 0);
-
     const [profile, setProfile] = useState(userProfile);
 
+    // 댓글 변경 시 로컬스토리지 저장
+    useEffect(() => {
+        localStorage.setItem(`comments_${tweet.tweetId}`, JSON.stringify(comments));
+    }, [comments, tweet.tweetId]);
+
+    // 프로필 변경 반영
     useEffect(() => {
         const handleStorageChange = (e) => {
             if (e.key === "profileAvatar" || e.key === "profileUsername") {
@@ -86,12 +92,14 @@ function TweetCard({ tweet = {}, onDelete, userProfile }) {
         setComment("");
     };
 
-    // 모달 열릴 때 조회수 +1
     useEffect(() => {
-        if (showReplyModal) {
-            setViews((prev) => prev + 1);
-        }
+        if (showReplyModal) setViews((prev) => prev + 1);
     }, [showReplyModal]);
+
+    const handleOpenDetail = () => {
+        setShowReplyModal(true);
+        navigate(`/${userProfile.username}/status/${tweet.tweetId}`);
+    };
 
     return (
         <div css={s.card}>
@@ -114,18 +122,8 @@ function TweetCard({ tweet = {}, onDelete, userProfile }) {
             </div>
 
             {/* 트윗 내용 */}
-            <div
-                css={s.content}
-                onClick={() => setShowComments(!showComments)} // 트윗 본문 클릭 → 댓글 토글
-            >
-                {tweet.content}
-            </div>
-
-            {imgSrc && (
-                <div css={s.imageWrapper}>
-                    <img src={imgSrc} alt="tweet" css={s.clickableImage} />
-                </div>
-            )}
+            <div css={s.content} onClick={handleOpenDetail}>{tweet.content}</div>
+            {imgSrc && <div css={s.imageWrapper}><img src={imgSrc} alt="tweet" css={s.clickableImage} /></div>}
 
             {/* 투표 */}
             {tweet.poll && (
@@ -146,9 +144,9 @@ function TweetCard({ tweet = {}, onDelete, userProfile }) {
 
             {/* 액션 버튼 */}
             <div css={s.actions}>
-                <div onClick={() => setShowReplyModal(true)}>
+                <div onClick={handleOpenDetail}>
                     <FaRegComment />
-                    <span>{comments.length}</span>
+                    <span>{Array.isArray(comments) ? comments.length : 0}</span>
                 </div>
                 <div onClick={() => setLiked(!liked)}>
                     {liked ? <FaHeart color="red" /> : <FaRegHeart />}
@@ -164,36 +162,15 @@ function TweetCard({ tweet = {}, onDelete, userProfile }) {
                 </div>
             </div>
 
-            {/* 댓글 리스트 */}
-            {showComments && comments.length > 0 && (
-                <div css={s.commentList}>
-                    {comments.map((c, idx) => {
-                        const elapsed = Math.floor((Date.now() - c.createdAt) / 1000);
-                        return (
-                            <div key={idx} css={s.commentItem}>
-                                <img src={c.user.avatar} alt="" css={s.avatar} />
-                                <span css={s.commentUser}>@{c.user.username}</span>
-                                · <span css={s.elapsedTime}>{formatElapsedTime(elapsed)}</span>
-                                <div>{c.text}</div>
-                            </div>
-                        );
-                    })}
-                </div>
-            )}
-
             {/* 답글 모달 */}
             {showReplyModal && (
                 <div css={s.modalOverlay} onClick={() => setShowReplyModal(false)}>
                     <div css={s.modalContent} onClick={(e) => e.stopPropagation()}>
-
-                        {/* 모달 헤더 */}
                         <div css={s.modalHeader}>
                             <button css={s.closeButton} onClick={() => setShowReplyModal(false)}>X</button>
                         </div>
 
-                        {/* 트윗 + 댓글 전체 컨테이너 */}
                         <div css={s.tweetContainer}>
-
                             {/* 작성자 */}
                             <div css={s.header}>
                                 <div css={s.user}>
@@ -210,7 +187,7 @@ function TweetCard({ tweet = {}, onDelete, userProfile }) {
                             {/* 트윗 내용 */}
                             <div css={s.content}>{tweet.content}</div>
 
-                            {/* 투표 (선택적) */}
+                            {/* 투표 */}
                             {tweet.poll && (
                                 <div css={s.pollBox}>
                                     {tweet.poll.options.map((opt, idx) => {
@@ -223,13 +200,11 @@ function TweetCard({ tweet = {}, onDelete, userProfile }) {
                                             </div>
                                         );
                                     })}
-                                    {tweet.poll.endTime && (
-                                        <div css={s.pollEnd}>마감: {new Date(tweet.poll.endTime).toLocaleString()}</div>
-                                    )}
+                                    {tweet.poll.endTime && <div css={s.pollEnd}>마감: {new Date(tweet.poll.endTime).toLocaleString()}</div>}
                                 </div>
                             )}
 
-                            {/* 답글 게시하기 (문장만 표시) */}
+                            {/* 답글 입력 */}
                             <div css={s.replyInputBox}>
                                 <textarea
                                     css={s.replyTextarea}
@@ -238,22 +213,17 @@ function TweetCard({ tweet = {}, onDelete, userProfile }) {
                                     onChange={(e) => setComment(e.target.value)}
                                 />
                             </div>
-
-                            {/* 답글 입력창 + 아이콘 */}
                             <div css={s.replyInputBox}>
-                                {/* 왼쪽 아이콘 그룹 */}
                                 <div css={s.iconGroup}>
                                     <button css={s.iconButton}><CiImageOn /></button>
                                     <button css={s.iconButton}><AiOutlineBars /></button>
                                     <button css={s.iconButton}><RiEmotionHappyLine /></button>
                                 </div>
-
-                                {/* 오른쪽 답글 버튼 */}
                                 <button css={s.replyButton} onClick={handleAddComment}>답글</button>
                             </div>
 
-                            {/* 댓글 리스트 */}
-                            {false && comments.length > 0 && (
+                            {/* 댓글 리스트 (Detail에서만 보임) */}
+                            {Array.isArray(comments) && comments.length > 0 && (
                                 <div css={s.commentList}>
                                     {comments.map((c, idx) => {
                                         const elapsed = Math.floor((Date.now() - c.createdAt) / 1000);

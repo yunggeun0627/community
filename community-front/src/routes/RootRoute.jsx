@@ -14,6 +14,7 @@ import Communites from '../Pages/Communites/Communites';
 import Premium from '../Pages/Premium/Premium';
 import Profile from '../Pages/Profile/Profile';
 import More from '../Pages/More/More';
+import TweetDetail from '../Pages/TweetDetail/TweetDetail';
 
 function RootRoute({ userProfile, onProfileChange }) {
     const location = useLocation();
@@ -55,6 +56,7 @@ function RootRoute({ userProfile, onProfileChange }) {
                         }
                     />
                     <Route path="/more" element={<More />} />
+                    <Route path="/:username/status/:tweetId" element={<TweetDetail />} />
                 </Routes>
             </MainLayout>
         );
